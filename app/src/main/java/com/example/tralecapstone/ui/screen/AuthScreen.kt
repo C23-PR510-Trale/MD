@@ -14,12 +14,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.example.tralecapstone.ui.navigation.TabItem
 import com.example.tralecapstone.R
 import com.example.tralecapstone.ui.theme.*
@@ -58,9 +62,11 @@ fun Tabs(tabs: List<TabItem>, pagerState: PagerState) {
     val scope = rememberCoroutineScope()
 
     TabRow(
-        modifier = Modifier.clip(RoundedCornerShape(50.dp, 50.dp, 0.dp, 0.dp)),
+        modifier = Modifier
+            .shadow(20.dp, shape = RoundedCornerShape(50.dp, 50.dp, 0.dp, 0.dp), true, DarkGrey, DarkGrey)
+            .clip(RoundedCornerShape(50.dp, 50.dp, 0.dp, 0.dp)),
         selectedTabIndex = pagerState.currentPage,
-        backgroundColor = Yellow100,
+        backgroundColor = Color.White,
         indicator = { tabPositions ->
             Modifier.pagerTabIndicatorOffset(pagerState = pagerState, tabPositions = tabPositions)
         }) {
@@ -73,7 +79,7 @@ fun Tabs(tabs: List<TabItem>, pagerState: PagerState) {
                         pagerState.animateScrollToPage(index)
                     }
                 },
-                text = {Text(tabItem.title) },
+                text = {Text(tabItem.title, fontWeight = FontWeight.SemiBold) },
                 icon = {  },
                 selectedContentColor = Orange400,
                 unselectedContentColor = DarkGrey,

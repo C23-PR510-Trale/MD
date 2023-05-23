@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tralecapstone.ui.theme.Poppins
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
 
 @Composable
@@ -39,6 +40,7 @@ fun OutlinedButton(
                 text = text,
                 color = DarkGray,
                 fontWeight = FontWeight.Bold,
+                fontFamily = Poppins,
                 fontSize = 14.sp,
                 modifier = Modifier.align(Alignment.CenterVertically)
             )

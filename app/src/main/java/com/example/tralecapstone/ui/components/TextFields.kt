@@ -31,6 +31,7 @@ fun TextFields(
     onValueChange: (String) -> Unit,
     onVisibilityChange: (Boolean) -> Unit = {},
     label: String,
+    color: Color,
     leadingIconImageVector: ImageVector,
     leadingIconDescription: String = "",
     isPassField: Boolean = false,
@@ -46,6 +47,9 @@ fun TextFields(
 //        verticalArrangement = Alignment.Center
     ) {
     OutlinedTextField(
+        colors =
+        if (showError) TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = Color.Red)
+        else TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = color),
         value = value,
         onValueChange = { onValueChange(it) },
 //        colors = TextFieldDefaults.textFieldColors(
@@ -107,6 +111,7 @@ fun TextFieldsPreview() {
             value = "",
             onValueChange = {},
             label = "input pass",
+            color = Yellow,
             showError = true,
             errorMessage = "Password Invalid",
             leadingIconImageVector = Icons.Default.Lock

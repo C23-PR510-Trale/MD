@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.example.tralecapstone.R
 import com.example.tralecapstone.ui.theme.Orange300
 import com.example.tralecapstone.ui.theme.Orange400
+import com.example.tralecapstone.ui.theme.Yellow
 import com.example.tralecapstone.ui.theme.Yellow100
 
 @Composable
@@ -41,12 +42,14 @@ fun Login() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Yellow100),
+            .background(color = Color.White)
+            .padding(10.dp),
     ) {
         TextFields(
             value = username,
             onValueChange = {username = it},
             label = "Username",
+            color = Yellow,
             leadingIconImageVector = Icons.Default.AccountCircle,
             leadingIconDescription = "input your username",
             showError = !validateUsernameLogin(username = username),
@@ -64,6 +67,7 @@ fun Login() {
             value = password,
             onValueChange = {password = it},
             label = "Password",
+            color = Yellow,
             leadingIconImageVector = Icons.Default.AccountCircle,
             leadingIconDescription = "input your password",
             showError = !validatePasswordLogin(password = password),
@@ -77,10 +81,14 @@ fun Login() {
             errorMessage = stringResource(id = R.string.password_error)
         )
 
-        //kasi spacer
+        Spacer(
+            modifier = Modifier
+                .padding(vertical = 50.dp)
+        )
 
-        FilledButton(text = "Login", color = Color.White, onClick = {},
-            enable =  if(!validateUsernameLogin(username = username) && !validatePasswordLogin(password = password)) false else true)
+        FilledButton(
+            text = "Login", color = Yellow, onClick = {},
+            enable =  if(!validateUsernameLogin(username = username) || !validatePasswordLogin(password = password)) false else true)
     }
 }
 
@@ -97,9 +105,9 @@ fun validatePasswordLogin(password : String) : Boolean {
 
     validatePassword =
         password.length > 8
-                && !password.matches(".*[A-Z].*".toRegex())
-                && !password.matches(".*[a-z].*".toRegex())
-                && !password.matches(".*[#@%*&_-].*".toRegex())
+                && password.matches(".*[A-Z].*".toRegex())
+                && password.matches(".*[a-z].*".toRegex())
+                && password.matches(".*[#@%*&_-].*".toRegex())
 
     return validatePassword
 }

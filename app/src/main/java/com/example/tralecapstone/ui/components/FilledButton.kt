@@ -15,10 +15,10 @@ import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
 
 @Composable
 fun FilledButton(
-    text : String,
-    size : Int = 40,
-    color : Color,
-    enable : Boolean,
+    text: String,
+    size: Int = 40,
+    color: Color,
+    enable: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
@@ -31,14 +31,13 @@ fun FilledButton(
             .fillMaxWidth()
             .height(size.dp)
     ) {
-            Text(
-                text = text,
-                fontSize = 14.sp,
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
-        }
-
+        Text(
+            text = text,
+            fontSize = 14.sp,
+            modifier = Modifier.align(Alignment.CenterVertically)
+        )
     }
+}
 
 @Preview(showBackground = true)
 @Composable

@@ -1,5 +1,10 @@
 package com.example.tralecapstone.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -23,18 +28,16 @@ import com.example.tralecapstone.ui.theme.Poppins
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
 
 @Composable
-private fun BottomBar(
-    navController: NavHostController,
-    modifier: Modifier = Modifier
-) {
-    BottomNavigation(modifier = modifier) {
+private fun BottomBar(navController: NavHostController) {
+
+    BottomNavigation {
+
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
         val navigationItems = listOf(
             NavigationItem(
                 title = stringResource(R.string.menu_home),
-//                icon = ImageVector.vectorResource(id = R.drawable.home),
                 icon = Icons.Default.Home,
                 screen = Screen.Home
             ),
@@ -54,6 +57,7 @@ private fun BottomBar(
                 screen = Screen.Profile
             ),
         )
+
         BottomNavigation(backgroundColor = Color.White) {
             navigationItems.map { item ->
                 BottomNavigationItem(
@@ -61,14 +65,16 @@ private fun BottomBar(
                         Icon(
                             imageVector = item.icon,
                             contentDescription = item.title,
-                            tint = MaterialTheme.colors.primary
+                            tint = MaterialTheme.colors.primary,
+                            modifier = Modifier.padding(bottom = 4.dp)
                         )
                     },
-                    label = { Text(
-                        item.title,
-                        color = DarkGray,
-                        fontWeight = FontWeight(600)
-                    ) },
+                    label = {
+                        Text(
+                            item.title,
+                            color = DarkGray,
+                            fontWeight = FontWeight(600)
+                        ) },
                     selected = currentRoute == item.screen.route,
                     onClick = {
                         navController.navigate(item.screen.route) {
