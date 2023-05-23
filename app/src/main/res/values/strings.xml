@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Trale</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_history">History</string>
+    <string name="menu_buddy">Buddy</string>
+    <string name="menu_profile">Profile</string>
+
+    <string name="price">Rp %s</string>
+    <string name="search">Find Plan Trip Here</string>
+
+    <string name="culinary">Culinary</string>
+    <string name="cultural">Cultural</string>
+    <string name="landmark">Landmark</string>
+    <string name="nature">Nature</string>
+
+    <string name="username_error">Username Invalid</string>
+    <string name="password_error">Password must contain capital and noncapital characters, numbers, special characters, and minimum length 8</string>
+
+
+</resources>
