@@ -34,19 +34,20 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainContent(modifier: Modifier = Modifier) {
 
-    val list = listOf(TabItem.Register,TabItem.Login)
+    val list = listOf(TabItem.Register, TabItem.Login)
     val pagerState = rememberPagerState(initialPage = 0)
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
     ) {
         Image(
             painter = painterResource(id = R.drawable.logo_app),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = modifier
-                .size(300.dp)
+                .size(200.dp)
                 .align(CenterHorizontally)
                 .padding(vertical = 30.dp)
         )
@@ -62,8 +63,15 @@ fun Tabs(tabs: List<TabItem>, pagerState: PagerState) {
     val scope = rememberCoroutineScope()
 
     TabRow(
+        divider = {},
         modifier = Modifier
-            .shadow(20.dp, shape = RoundedCornerShape(50.dp, 50.dp, 0.dp, 0.dp), true, DarkGrey, DarkGrey)
+            .shadow(
+                20.dp,
+                shape = RoundedCornerShape(50.dp, 50.dp, 0.dp, 0.dp),
+                true,
+                DarkGrey,
+                DarkGrey
+            )
             .clip(RoundedCornerShape(50.dp, 50.dp, 0.dp, 0.dp)),
         selectedTabIndex = pagerState.currentPage,
         backgroundColor = Color.White,
@@ -79,21 +87,20 @@ fun Tabs(tabs: List<TabItem>, pagerState: PagerState) {
                         pagerState.animateScrollToPage(index)
                     }
                 },
-                text = {Text(tabItem.title, fontWeight = FontWeight.SemiBold) },
-                icon = {  },
+                text = { Text(tabItem.title, fontWeight = FontWeight.SemiBold) },
+                icon = { },
                 selectedContentColor = Orange400,
                 unselectedContentColor = DarkGrey,
                 enabled = true
             )
-
         }
     }
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TabContent(tabs:List<TabItem>,pagerState: PagerState) {
-    HorizontalPager(count = tabs.size,state=pagerState) { page ->
+fun TabContent(tabs: List<TabItem>, pagerState: PagerState) {
+    HorizontalPager(count = tabs.size, state = pagerState) { page ->
         tabs[page].screens()
     }
 }

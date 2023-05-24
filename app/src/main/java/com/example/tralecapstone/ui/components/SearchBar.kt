@@ -1,6 +1,7 @@
 package com.example.tralecapstone.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,8 +26,7 @@ import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
 fun SearchBar(
     query: String,
     onQueryChange: (String) -> Unit,
-    modifier: Modifier = Modifier.padding(start = 10.dp)
-        .fillMaxWidth()
+    modifier: Modifier = Modifier.fillMaxWidth()
 ) {
 //    val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -54,11 +54,10 @@ fun SearchBar(
         modifier = modifier
             .padding(16.dp)
             .fillMaxWidth()
-            .heightIn(min = 48.dp)
+            .heightIn(min = 30.dp)
             .clip(RoundedCornerShape(24.dp))
     )
 }
-
 
 @Composable
 @Preview(showBackground = true)

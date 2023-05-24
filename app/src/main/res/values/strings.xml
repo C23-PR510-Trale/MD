@@ -14,8 +14,16 @@
     <string name="landmark">Landmark</string>
     <string name="nature">Nature</string>
 
+    <string name="click_back">Click to Back</string>
+    <string name="back">Back</string>
+
     <string name="username_error">Username Invalid</string>
     <string name="password_error">Password must contain capital and noncapital characters, numbers, special characters, and minimum length 8</string>
+    <string name="name_error">Name Invalid</string>
+    <string name="address_error">Address Invalid</string>
+    <string name="telpnumb_error">Telephone Number Invalid</string>
+    <string name="email_error">Email Invalid</string>
+    <string name="confpass_error">Password don\'t match</string>
 
 
 </resources>

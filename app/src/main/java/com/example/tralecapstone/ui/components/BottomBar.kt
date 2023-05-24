@@ -28,7 +28,7 @@ import com.example.tralecapstone.ui.theme.Poppins
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
 
 @Composable
-private fun BottomBar(navController: NavHostController) {
+fun BottomBar(navController: NavHostController) {
 
     BottomNavigation {
 

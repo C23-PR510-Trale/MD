@@ -24,8 +24,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tralecapstone.R
@@ -47,17 +49,17 @@ fun CardHostsItem(
 ) {
     Card(
         modifier = Modifier
-            .padding(14.dp)
+            .padding(start = 14.dp, end = 24.dp)
             .fillMaxWidth()
-            .clickable { }
-            .padding(10.dp),
+            .clickable { },
         shape = RoundedCornerShape(corner = CornerSize(20.dp)),
         elevation = 4.dp
-    ){
+    ) {
         Row(modifier = Modifier.padding(14.dp)) {
             Image(
                 painter = painterResource(image),
                 contentDescription = null,
+                contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .size(90.dp)
                     .clip(RoundedCornerShape(20.dp))
@@ -65,8 +67,7 @@ fun CardHostsItem(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(14.dp)
-                    .weight(1.0f)
+                    .padding(horizontal = 14.dp)
                     .align(CenterVertically)
             ) {
                 Text(
@@ -85,48 +86,55 @@ fun CardHostsItem(
                     style = MaterialTheme.typography.subtitle2,
                     fontSize = 14.sp,
                 )
-                Row(
-                    modifier = Modifier.weight(1.0f)
-                ) {
+
+                Row(modifier = Modifier.fillMaxWidth()) {
                     Text(
                         text = rating.toString(),
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colors.primary,
-                        style = MaterialTheme.typography.subtitle2,
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(top = 3.dp)
                     )
                     Icon(
                         imageVector = Icons.Default.Star,
                         contentDescription = null,
                         tint = MaterialTheme.colors.primary,
-                        modifier = Modifier.size(16.dp).align(CenterVertically)
+                        modifier = Modifier
+                            .size(18.dp)
+                            .padding(start = 4.dp)
+                            .align(CenterVertically)
                     )
 
                     Spacer(
                         modifier = Modifier
-                            .padding(horizontal = 10.dp, vertical = 4.dp,)
+                            .padding(horizontal = 10.dp)
                             .size(2.dp, 14.dp)
                             .background(MaterialTheme.colors.primary)
+                            .align(CenterVertically)
                     )
 
                     Text(
                         text = category,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colors.primary,
-                        style = MaterialTheme.typography.subtitle2,
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(top = 3.dp)
                     )
 
                     Spacer(
                         modifier = Modifier
-                            .padding(horizontal = 10.dp, vertical = 4.dp,)
+                            .padding(horizontal = 10.dp)
                             .size(2.dp, 14.dp)
                             .background(MaterialTheme.colors.primary)
+                            .align(CenterVertically)
                     )
 
                     Text(
                         text = openStatus,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colors.primary,
-                        style = MaterialTheme.typography.subtitle2,
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(top = 3.dp)
                     )
 
                 }

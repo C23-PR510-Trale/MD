@@ -10,7 +10,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.tralecapstone.ui.BottomBar
+import com.example.tralecapstone.ui.components.floatingActionButtons
 import com.example.tralecapstone.ui.navigation.Screen
+import com.example.tralecapstone.ui.screen.HomeScreen
 
 @Composable
 fun TraleApp(
@@ -19,11 +22,13 @@ fun TraleApp(
 ) {
 //    val navBackStackEntry by navController.currentBackStackEntryAsState()
 //    val currentRoute = navBackStackEntry?.destination?.route
-
     Scaffold(
+        floatingActionButton = {
+            floatingActionButtons()
+        },
         bottomBar = {
 //            if (currentRoute != Screen.DetailPlan.route) {
-//                BottomBar(navController)
+                BottomBar(navController)
 //            }
         },
         modifier = modifier
@@ -34,11 +39,11 @@ fun TraleApp(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.route) {
-//                HomeScreen(
-//                    navigateToDetail = { rewardId ->
-//                        navController.navigate(Screen.DetailPlan.createRoute(rewardId))
-//                    }
-//                )
+                HomeScreen(
+                    navigateToDetail = { id ->
+                        navController.navigate(Screen.DetailPlan.createRoute(id))
+                    }
+                )
             }
 //            composable(Screen.Cart.route) {
 //                val context = LocalContext.current
