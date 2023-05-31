@@ -2,8 +2,8 @@
     <string name="app_name">Trale</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_history">History</string>
-    <string name="menu_buddy">Buddy</string>
+    <string name="menu_community">Community</string>
+    <string name="menu_message">Message</string>
     <string name="menu_profile">Profile</string>
 
     <string name="price">Rp %s</string>
@@ -13,6 +13,10 @@
     <string name="cultural">Cultural</string>
     <string name="landmark">Landmark</string>
     <string name="nature">Nature</string>
+
+    <string name="wifi">Wi-Fi</string>
+    <string name="beverages">Beverages</string>
+    <string name="food">Foods</string>
 
     <string name="click_back">Click to Back</string>
     <string name="back">Back</string>

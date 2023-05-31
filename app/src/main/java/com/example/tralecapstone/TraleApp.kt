@@ -5,15 +5,18 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.tralecapstone.ui.BottomBar
 import com.example.tralecapstone.ui.components.floatingActionButtons
 import com.example.tralecapstone.ui.navigation.Screen
-import com.example.tralecapstone.ui.screen.HomeScreen
+import com.example.tralecapstone.ui.screen.*
 
 @Composable
 fun TraleApp(
@@ -35,49 +38,59 @@ fun TraleApp(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Home.route,
+            startDestination = Screen.Splash.route,
             modifier = Modifier.padding(innerPadding)
         ) {
+            composable(Screen.Splash.route) {
+                SplashScreen(navController = navController)
+            }
             composable(Screen.Home.route) {
                 HomeScreen(
                     navigateToDetail = { id ->
-                        navController.navigate(Screen.DetailPlan.createRoute(id))
+                        navController.navigate(Screen.HometoDetailPlan.createRoute(id))
                     }
                 )
             }
-//            composable(Screen.Cart.route) {
+            composable(Screen.Community.route) {
 //                val context = LocalContext.current
 //                CartScreen(
 //                    onOrderButtonClicked = { message ->
 //                        shareOrder(context, message)
 //                    }
 //                )
-//            }
-//            composable(Screen.Profile.route) {
+            }
+            composable(Screen.Message.route) {
 //                ProfileScreen()
-//            }
-//            composable(
-//                route = Screen.DetailReward.route,
-//                arguments = listOf(navArgument("rewardId") { type = NavType.LongType }),
-//            ) {
-//                val id = it.arguments?.getLong("rewardId") ?: -1L
-//                DetailScreen(
-//                    rewardId = id,
-//                    navigateBack = {
-//                        navController.navigateUp()
-//                    },
-//                    navigateToCart = {
-//                        navController.popBackStack()
-//                        navController.navigate(Screen.Cart.route) {
-//                            popUpTo(navController.graph.findStartDestination().id) {
-//                                saveState = true
-//                            }
-//                            launchSingleTop = true
-//                            restoreState = true
-//                        }
-//                    }
-//                )
-//            }
+            }
+            composable(Screen.Profile.route) {
+                EditProfileScreen(
+                    navigateBack = {
+                        navController.navigateUp()
+                    }
+                )
+            }
+            composable(
+                route = Screen.HometoDetailPlan.route,
+                arguments = listOf(navArgument("id") { type = NavType.IntType }),
+            ) {
+                val id = it.arguments!!.getInt("id")
+                DetailPlanScreen(
+                    idPlan = id,
+                    navigateBack = {
+                        navController.navigateUp()
+                    },
+                    navigateToBooking = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.Payment.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                )
+            }
         }
     }
 }

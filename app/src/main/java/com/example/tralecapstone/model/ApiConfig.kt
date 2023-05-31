@@ -5,7 +5,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-private const val BASE_URL = "https://story-api.dicoding.dev/v1/"
+private const val BASE_URL = "https://trale-388313.et.r.appspot.com"
 
 class ApiConfig {
 

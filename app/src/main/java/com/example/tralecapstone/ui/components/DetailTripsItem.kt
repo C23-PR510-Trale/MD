@@ -39,7 +39,6 @@ fun DetailTripsItem(
     title: String,
     desc: String,
     price: Int,
-    navigateToDetail: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -49,7 +48,6 @@ fun DetailTripsItem(
     ) {
         Text(
             text = title,
-            maxLines = 3,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.subtitle1.copy(
                 fontWeight = FontWeight.ExtraBold,
@@ -93,7 +91,6 @@ fun DetailTripsItemPreview() {
             title = "Title Plan Hosts",
             price = 500000,
             desc = "Culinary",
-            navigateToDetail = { },
         )
     }
 }

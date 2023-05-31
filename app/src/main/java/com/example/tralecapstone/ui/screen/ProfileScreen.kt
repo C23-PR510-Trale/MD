@@ -42,7 +42,7 @@ import com.example.tralecapstone.ui.theme.Yellow
 @Composable
 fun ProfileScreen(
     navigateBack: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier.padding(20.dp)
 ) {
     Box (modifier = modifier) {
         Image(

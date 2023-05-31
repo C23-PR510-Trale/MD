@@ -8,4 +8,7 @@ data class PlanTrip(
     val rating: Double,
     val category: String,
     val openStatus: String,
+    val trips: List<Trips>,
+    val facilities: Facilities,
+    val prevTrips : Int,
 )

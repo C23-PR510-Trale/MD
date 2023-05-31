@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.rounded.Chat
+import androidx.compose.material.icons.rounded.Forum
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -42,14 +44,14 @@ fun BottomBar(navController: NavHostController) {
                 screen = Screen.Home
             ),
             NavigationItem(
-                title = stringResource(R.string.menu_buddy),
-                icon = Icons.Default.Face,
-                screen = Screen.Buddy
+                title = stringResource(R.string.menu_community),
+                icon = Icons.Rounded.Forum,
+                screen = Screen.Community
             ),
             NavigationItem(
-                title = stringResource(R.string.menu_history),
-                icon = Icons.Default.Receipt,
-                screen = Screen.Profile
+                title = stringResource(R.string.menu_message),
+                icon = Icons.Rounded.Chat,
+                screen = Screen.Message
             ),
             NavigationItem(
                 title = stringResource(R.string.menu_profile),
