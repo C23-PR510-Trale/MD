@@ -17,6 +17,12 @@ class ViewModelFactory (private val repository: PlanTripRepository) : ViewModelP
         else if (modelClass.isAssignableFrom(HistoryViewModel::class.java)) {
             return HistoryViewModel(repository) as T
         }
+        else if (modelClass.isAssignableFrom(CommunityViewModel::class.java)) {
+            return CommunityViewModel(repository) as T
+        }
+        else if (modelClass.isAssignableFrom(VoluntripViewModel::class.java)) {
+            return VoluntripViewModel(repository) as T
+        }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }
 

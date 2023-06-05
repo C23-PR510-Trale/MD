@@ -76,25 +76,24 @@ fun AddPlanScreen(
             contentDescription = null,
         )
         Column {
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
+
+            Box(modifier = Modifier.fillMaxWidth()) {
                 Icon(
                     imageVector = Icons.Rounded.ArrowBackIos,
                     contentDescription = stringResource(id = R.string.click_back),
                     modifier = Modifier
                         .padding(16.dp)
                         .clickable { navigateBack() }
-                        .align(Alignment.CenterVertically)
+                        .align(Alignment.CenterStart)
                 )
                 Text(
                     text = "Let us know about you",
-                    textAlign = TextAlign.Start,
+                    textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .align(Alignment.CenterVertically)
+                        .align(Alignment.Center)
                         .padding(horizontal = 10.dp, vertical = 16.dp)
                 )
             }

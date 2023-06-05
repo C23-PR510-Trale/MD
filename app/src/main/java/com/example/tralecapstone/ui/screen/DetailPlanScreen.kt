@@ -113,13 +113,13 @@ fun DetailContent(
             )
             Text(
                 text = "Wahid’s Surabaya Culinary Venture",
-                textAlign = TextAlign.Center,
+                textAlign = TextAlign.Start,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(CenterVertically)
-                    .padding(horizontal = 10.dp, vertical = 16.dp)
+                    .padding(horizontal = 14.dp, vertical = 16.dp)
             )
         }
 

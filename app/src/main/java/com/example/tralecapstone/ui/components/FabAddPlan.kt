@@ -7,6 +7,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import com.example.tralecapstone.ui.navigation.Screen
+import com.example.tralecapstone.ui.screen.AddPlanScreen
 import com.example.tralecapstone.ui.theme.Yellow
 
 @Composable
@@ -18,6 +20,7 @@ fun floatingActionButtons() {
     FloatingActionButton(
         onClick = {
             // on below line we are adding on click for our fab
+                  AddPlanScreen(navigateBack = { /*TODO*/ })
         },
         // adding background color for our button
         backgroundColor = Yellow,

@@ -3,7 +3,7 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_community">Community</string>
-    <string name="menu_message">Message</string>
+    <string name="menu_voluntrip">Voluntrip</string>
     <string name="menu_profile">Profile</string>
 
     <string name="price">Rp %s</string>

@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -82,7 +84,7 @@ fun TripRecommendationContent(
             .background(Color.White)
             .fillMaxSize()
     ) {
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
@@ -92,7 +94,7 @@ fun TripRecommendationContent(
                 modifier = Modifier
                     .padding(16.dp)
                     .clickable { navigateBack() }
-                    .align(Alignment.CenterVertically)
+                    .align(Alignment.CenterStart)
             )
             Text(
                 text = "Trip Recommendation",
@@ -101,11 +103,16 @@ fun TripRecommendationContent(
                 fontSize = 18.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.CenterVertically)
+                    .align(Alignment.Center)
                     .padding(horizontal = 10.dp, vertical = 16.dp)
             )
-            TripCategories()
         }
+
+        TripCategories(
+            modifier = modifier
+                .align(CenterHorizontally)
+                .padding(vertical = 20.dp),
+            onClick = {})
 
 //            LazyHorizontalGrid(
 //                rows = GridCells.Adaptive(160.dp),
@@ -115,24 +122,24 @@ fun TripRecommendationContent(
 //                modifier = modifier
 //            ) {
 //                items(planList) { data ->
-            CardHostsItem(
+        CardHostsItem(
 //                        hostId = data.id,
-                hostId = 0,
+            hostId = 0,
 //                        image = data.image,
-                image = R.drawable.background,
-                title = "data.title",
+            image = R.drawable.background,
+            title = "data.title",
 //                        price = data.price,
-                price = 100000,
+            price = 100000,
 //                        rating = data.rating,
-                rating = 4.5,
+            rating = 4.5,
 //                    category = data.category,
-                category = "culinary",
+            category = "culinary",
 //                    openStatus = data.openStatus,
-                openStatus = "Open",
-                navigateToDetail = {
-                    navigateToDetail(it)
-                }
-            )
+            openStatus = "Open",
+            navigateToDetail = {
+                navigateToDetail(it)
+            }
+        )
 //                }
 //            }
     }
@@ -142,6 +149,6 @@ fun TripRecommendationContent(
 @Composable
 fun TripRecommendationScreenPreview() {
     TraleCapstoneTheme {
-        HistoryScreen(navigateToDetail = {}, navigateBack = {})
+        TripRecommendationScreen(navigateToDetail = {}, navigateBack = {})
     }
 }

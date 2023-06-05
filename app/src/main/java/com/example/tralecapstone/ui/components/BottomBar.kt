@@ -1,15 +1,14 @@
 package com.example.tralecapstone.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.Chat
 import androidx.compose.material.icons.rounded.Forum
+import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.PersonPin
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -19,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -40,18 +40,18 @@ fun BottomBar(navController: NavHostController) {
         val navigationItems = listOf(
             NavigationItem(
                 title = stringResource(R.string.menu_home),
-                icon = Icons.Default.Home,
+                icon = Icons.Rounded.Home,
                 screen = Screen.Home
+            ),
+            NavigationItem(
+                title = stringResource(R.string.menu_voluntrip),
+                icon = Icons.Rounded.PersonPin,
+                screen = Screen.Voluntrip
             ),
             NavigationItem(
                 title = stringResource(R.string.menu_community),
                 icon = Icons.Rounded.Forum,
                 screen = Screen.Community
-            ),
-            NavigationItem(
-                title = stringResource(R.string.menu_message),
-                icon = Icons.Rounded.Chat,
-                screen = Screen.Message
             ),
             NavigationItem(
                 title = stringResource(R.string.menu_profile),
@@ -68,13 +68,16 @@ fun BottomBar(navController: NavHostController) {
                             imageVector = item.icon,
                             contentDescription = item.title,
                             tint = MaterialTheme.colors.primary,
-                            modifier = Modifier.padding(bottom = 4.dp)
+                            modifier = Modifier
+                                .size(24.dp)
+                                .padding(bottom = 4.dp)
                         )
                     },
                     label = {
                         Text(
                             item.title,
                             color = DarkGray,
+                            fontSize = 11.sp,
                             fontWeight = FontWeight(600)
                         ) },
                     selected = currentRoute == item.screen.route,

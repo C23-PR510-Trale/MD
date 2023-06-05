@@ -3,6 +3,7 @@ package com.example.tralecapstone
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -17,22 +18,34 @@ import com.example.tralecapstone.ui.BottomBar
 import com.example.tralecapstone.ui.components.floatingActionButtons
 import com.example.tralecapstone.ui.navigation.Screen
 import com.example.tralecapstone.ui.screen.*
+import com.example.tralecapstone.ui.screen.sidefiture.CommunityScreen
+import com.example.tralecapstone.ui.screen.sidefiture.VoluntripScreen
 
 @Composable
 fun TraleApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
 ) {
-//    val navBackStackEntry by navController.currentBackStackEntryAsState()
-//    val currentRoute = navBackStackEntry?.destination?.route
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
     Scaffold(
         floatingActionButton = {
-            floatingActionButtons()
+            if (
+                currentRoute == Screen.Home.route
+            ) {
+                floatingActionButtons()
+            }
         },
         bottomBar = {
-//            if (currentRoute != Screen.DetailPlan.route) {
+            if (
+                currentRoute == Screen.Home.route ||
+                currentRoute == Screen.Voluntrip.route ||
+                currentRoute == Screen.Community.route ||
+                currentRoute == Screen.Profile.route
+            ) {
                 BottomBar(navController)
-//            }
+            }
         },
         modifier = modifier
     ) { innerPadding ->
@@ -51,7 +64,8 @@ fun TraleApp(
                     }
                 )
             }
-            composable(Screen.Community.route) {
+            composable(Screen.Voluntrip.route) {
+                VoluntripScreen()
 //                val context = LocalContext.current
 //                CartScreen(
 //                    onOrderButtonClicked = { message ->
@@ -59,8 +73,8 @@ fun TraleApp(
 //                    }
 //                )
             }
-            composable(Screen.Message.route) {
-//                ProfileScreen()
+            composable(Screen.Community.route) {
+                CommunityScreen()
             }
             composable(Screen.Profile.route) {
                 EditProfileScreen(

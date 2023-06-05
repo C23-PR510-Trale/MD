@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.map
 
 class PlanTripRepository {
     private val plans = mutableListOf<PlanTrip>()
+    private val posts = mutableListOf<Post>()
+    private val voluntrips = mutableListOf<Voluntrip>()
 
     init {
         if (plans.isEmpty()) {
@@ -17,6 +19,14 @@ class PlanTripRepository {
 
     fun getAllPlans(): Flow<List<PlanTrip>> {
         return flowOf(plans)
+    }
+
+    fun getAllPosts(): Flow<List<Post>> {
+        return flowOf(posts)
+    }
+
+    fun getAllVoluntrip(): Flow<List<Voluntrip>> {
+        return flowOf(voluntrips)
     }
 
     fun getResultTrips(): List<PlanTrip> {

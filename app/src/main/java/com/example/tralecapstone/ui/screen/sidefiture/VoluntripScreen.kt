@@ -1,16 +1,13 @@
-package com.example.tralecapstone.ui.screen
+package com.example.tralecapstone.ui.screen.sidefiture
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.rounded.ArrowBackIos
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,38 +25,32 @@ import com.example.tralecapstone.di.Injection
 import com.example.tralecapstone.R
 import com.example.tralecapstone.model.PlanTrip
 import com.example.tralecapstone.model.PlanTripRepository
-import com.example.tralecapstone.ui.components.CardHostsItem
-import com.example.tralecapstone.ui.components.EmergencyNumber
-import com.example.tralecapstone.ui.components.SearchBar
+import com.example.tralecapstone.model.Post
+import com.example.tralecapstone.model.Voluntrip
+import com.example.tralecapstone.ui.components.*
 import com.example.tralecapstone.ui.state.UiState
 import com.example.tralecapstone.ui.theme.DarkGrey
 import com.example.tralecapstone.ui.theme.Orange300
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
 import com.example.tralecapstone.ui.theme.Yellow
-import com.example.tralecapstone.viewmodel.HistoryViewModel
-import com.example.tralecapstone.viewmodel.HomeViewModel
-import com.example.tralecapstone.viewmodel.ViewModelFactory
+import com.example.tralecapstone.viewmodel.*
 
 @Composable
-fun HistoryScreen(
+fun VoluntripScreen(
     modifier: Modifier = Modifier,
-    viewModel: HistoryViewModel = viewModel(
+    viewModel: VoluntripViewModel = viewModel(
         factory = ViewModelFactory(Injection.provideRepository())
     ),
-    navigateBack: () -> Unit,
-    navigateToDetail: (Int) -> Unit,
 ) {
     viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
         when (uiState) {
             is UiState.Loading -> {
-                viewModel.getAllHistory()
+                viewModel.getAllVoluntrip()
             }
             is UiState.Success -> {
-                HistoryContent(
-                    planList = uiState.data,
+                VoluntripContent(
+                    voluntrip = uiState.data,
                     modifier = modifier,
-                    navigateBack = navigateBack,
-                    navigateToDetail = navigateToDetail,
                 )
             }
             is UiState.Error -> {}
@@ -68,11 +59,9 @@ fun HistoryScreen(
 }
 
 @Composable
-fun HistoryContent(
-    planList: List<PlanTrip>,
+fun VoluntripContent(
+    voluntrip: List<Voluntrip>,
     modifier: Modifier = Modifier,
-    navigateBack: () -> Unit,
-    navigateToDetail: (Int) -> Unit,
     viewModel: HomeViewModel = viewModel(factory = ViewModelFactory(PlanTripRepository())),
 ) {
 
@@ -82,26 +71,15 @@ fun HistoryContent(
             .fillMaxSize()
     ) {
 
-        Box(modifier = Modifier.fillMaxWidth()) {
-            Icon(
-                imageVector = Icons.Rounded.ArrowBackIos,
-                contentDescription = stringResource(id = R.string.click_back),
-                modifier = Modifier
-                    .padding(16.dp)
-                    .clickable { navigateBack() }
-                    .align(Alignment.CenterStart)
-            )
             Text(
-                text = "Trip History",
+                text = "Voluntrip",
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.Center)
-                    .padding(horizontal = 10.dp, vertical = 16.dp)
+                    .padding(horizontal = 10.dp, vertical = 20.dp)
             )
-        }
 
 //            LazyHorizontalGrid(
 //                rows = GridCells.Adaptive(160.dp),
@@ -111,23 +89,15 @@ fun HistoryContent(
 //                modifier = modifier
 //            ) {
 //                items(planList) { data ->
-            CardHostsItem(
-//                        hostId = data.id,
-                hostId = 0,
-//                        image = data.image,
-                image = R.drawable.background,
+            CardVoluntripItem(
+//                        VtId = data.id,
+                VtId = 0,
                 title = "data.title",
-//                        price = data.price,
-                price = 100000,
-//                        rating = data.rating,
-                rating = 4.5,
-//                    category = data.category,
-                category = "culinary",
-//                    openStatus = data.openStatus,
-                openStatus = "Open",
-                navigateToDetail = {
-                    navigateToDetail(it)
-                }
+                desc = "data.desc",
+                price = 500000,
+                rating = 4.7,
+                category = "data.category",
+                city = "data.city"
             )
 //                }
 //            }
@@ -136,8 +106,8 @@ fun HistoryContent(
 
 @Preview(showBackground = true)
 @Composable
-fun HistoryScreenPreview() {
+fun VoluntripScreenPreview() {
     TraleCapstoneTheme {
-        HistoryScreen(navigateToDetail = {}, navigateBack = {})
+        VoluntripScreen()
     }
 }
