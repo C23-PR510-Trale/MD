@@ -1,15 +1,17 @@
 package com.example.tralecapstone.model
 
 import com.example.tralecapstone.model.request.LoginRequest
+import com.example.tralecapstone.model.request.RegisterRequest
 import com.example.tralecapstone.model.response.LoginResponse
+import com.example.tralecapstone.model.response.RegisterResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
-interface ApiService {
-//    @POST("/")
-//    fun register(@Body loginRequest: LoginRequest) : Call<ResponseLogin>
+interface ApiServicePython {
+    @POST("/register")
+    fun register(@Body registerRequest: RegisterRequest) : Call<RegisterResponse>
     @POST("/login")
     fun login(@Body loginRequest: LoginRequest) : Call<LoginResponse>
 

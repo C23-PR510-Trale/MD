@@ -35,9 +35,10 @@ fun TextFields(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     showError: Boolean = false,
     errorMessage: String = "",
+    modifier : Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
 //        verticalArrangement = Alignment.Center
     ) {

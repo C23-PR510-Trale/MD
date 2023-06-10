@@ -1,6 +1,5 @@
 package com.example.tralecapstone.ui.screen
 
-import android.content.Context
 import android.os.Build
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
@@ -10,30 +9,38 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.rounded.AccountBox
 import androidx.compose.material.icons.rounded.ArrowBackIos
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.material.icons.rounded.CreditCard
+import androidx.compose.material.icons.rounded.Paid
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.example.tralecapstone.R
 import com.example.tralecapstone.di.Injection
 import com.example.tralecapstone.model.Facilities
@@ -42,10 +49,11 @@ import com.example.tralecapstone.model.PlanTripRepository
 import com.example.tralecapstone.model.Trips
 import com.example.tralecapstone.ui.components.CardHostsItem
 import com.example.tralecapstone.ui.components.FilledButton
-import com.example.tralecapstone.ui.navigation.Screen
+import com.example.tralecapstone.ui.components.TextFields
 import com.example.tralecapstone.ui.state.UiState
 import com.example.tralecapstone.ui.theme.Orange400
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
+import com.example.tralecapstone.ui.theme.Yellow
 import com.example.tralecapstone.viewmodel.DetailViewModel
 import com.example.tralecapstone.viewmodel.HistoryViewModel
 import com.example.tralecapstone.viewmodel.HomeViewModel
@@ -59,13 +67,9 @@ import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun PaymentScreen(
+fun PaymentDetailScreen(
     idPlan: Int,
     modifier: Modifier = Modifier,
-    viewModel: DetailViewModel = viewModel(
-        factory = ViewModelFactory(Injection.provideRepository())
-    ),
-    navController: NavController,
     navigateBack: () -> Unit,
     navigateToDetail: (Int) -> Unit,
 ) {
@@ -75,7 +79,7 @@ fun PaymentScreen(
 //                viewModel.getPlanById(idPlan)
 //            }
 //            is UiState.Success -> {
-    PaymentContent(
+    PaymentDetailContent(
 //                    planTrip = uiState.data,
         planTrip = PlanTrip(
             0,
@@ -91,7 +95,6 @@ fun PaymentScreen(
         modifier = modifier,
         navigateBack = navigateBack,
         navigateToDetail = navigateToDetail,
-        navController = navController,
     )
 //            }
 //            is UiState.Error -> {}
@@ -100,10 +103,9 @@ fun PaymentScreen(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun PaymentContent(
+fun PaymentDetailContent(
     planTrip: PlanTrip,
     modifier: Modifier = Modifier,
-    navController: NavController,
     navigateBack: () -> Unit,
     navigateToDetail: (Int) -> Unit,
     viewModel: DetailViewModel = viewModel(factory = ViewModelFactory(PlanTripRepository())),
@@ -123,7 +125,7 @@ fun PaymentContent(
                     .align(Alignment.CenterStart)
             )
             Text(
-                text = "Payment Confirmation",
+                text = "Payment Details",
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
@@ -133,25 +135,6 @@ fun PaymentContent(
                     .padding(horizontal = 10.dp, vertical = 16.dp)
             )
         }
-
-        CardHostsItem(
-//                        hostId = data.id,
-            hostId = 0,
-//                        image = data.image,
-            image = R.drawable.background,
-            title = "data.title",
-//                        price = data.price,
-            price = 100000,
-//                        rating = data.rating,
-            rating = 4.5,
-//                    category = data.category,
-            category = "culinary",
-//                    openStatus = data.openStatus,
-            openStatus = "Open",
-            navigateToDetail = {
-                navigateToDetail(it)
-            }
-        )
 
         Card(
             modifier = Modifier
@@ -166,7 +149,7 @@ fun PaymentContent(
                     .padding(horizontal = 14.dp, vertical = 16.dp)
             ) {
                 Text(
-                    text = "Payment Details",
+                    text = "Scan QRIS QR Code",
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.subtitle1.copy(
                         fontWeight = FontWeight.Bold,
@@ -175,98 +158,88 @@ fun PaymentContent(
                     fontSize = 16.sp,
                 )
 
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = "Price",
-                        color = MaterialTheme.colors.primary,
-                        style = MaterialTheme.typography.subtitle2,
-                        fontSize = 14.sp,
-                    )
-                    Text(
-                        text = stringResource(R.string.price, 500000),
-//                        text = stringResource(R.string.price, planTrip.price),
-                        color = MaterialTheme.colors.primary,
-                        textAlign = TextAlign.End,
-                        style = MaterialTheme.typography.subtitle2,
-                        fontSize = 14.sp,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
+                Image(
+                    painter = painterResource(R.drawable.qrcode),
+                    contentDescription = "qrcode for qris payment",
+                    contentScale = ContentScale.FillBounds,
+                    modifier = Modifier
+                        .size(100.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                )
 
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = "Admin",
-                        color = MaterialTheme.colors.primary,
-                        style = MaterialTheme.typography.subtitle2,
-                        fontSize = 14.sp,
-                    )
-                    Text(
-                        text = stringResource(R.string.price, 5000),
-                        color = MaterialTheme.colors.primary,
-                        textAlign = TextAlign.End,
-                        style = MaterialTheme.typography.subtitle2,
-                        fontSize = 14.sp,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
+                Text(
+                    text = "Or",
+                    color = MaterialTheme.colors.primary,
+                    style = MaterialTheme.typography.subtitle2,
+                    fontSize = 14.sp,
+                )
 
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = "Unique Code",
+                Text(
+                    text = "Enter your Credit Card Details",
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.subtitle1.copy(
+                        fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colors.primary,
-                        style = MaterialTheme.typography.subtitle2,
-                        fontSize = 14.sp,
-                    )
-                    Text(
-                        text = stringResource(R.string.price, 321),
-                        color = MaterialTheme.colors.primary,
-                        textAlign = TextAlign.End,
-                        style = MaterialTheme.typography.subtitle2,
-                        fontSize = 14.sp,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
+                    ),
+                    fontSize = 16.sp,
+                )
+
+                var name by remember { mutableStateOf("") }
+                var cardNumb by remember { mutableStateOf(0) }
+                val focusManager = LocalFocusManager.current
+
+                TextFields(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = "Card Holder Name",
+                    color = Yellow,
+                    leadingIconImageVector = Icons.Rounded.AccountBox,
+                    leadingIconDescription = "input the card holder name",
+                    showError = !validateDataRegis(data = name),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    ),
+                    errorMessage = "Fill In Card Holder Name"
+                )
+
+
+                TextFields(
+                    value = cardNumb.toString(),
+                    onValueChange = {cardNumb = if(it == "") 0 else it.toInt()},
+                    label = "Card Number",
+                    color = Yellow,
+                    leadingIconImageVector = Icons.Rounded.CreditCard,
+                    leadingIconDescription = "input your card number",
+                    showError = !com.example.tralecapstone.ui.components.validateDataRegis(data = cardNumb.toString()),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next
+                    ), //
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    ),
+                )
             }
         }
 
-        Text(
-            text = "Transfer Here",
-            overflow = TextOverflow.Ellipsis,
-//            style = MaterialTheme.typography.subtitle1.copy(
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colors.primary,
-//            ),
-            fontSize = 16.sp,
-            modifier = Modifier.padding(start = 20.dp, bottom = 6.dp)
-        )
-
-        Text(
-            text = "1234 567 891 011 a.n Aghni Qisthi",
-            color = MaterialTheme.colors.primary,
-//            style = MaterialTheme.typography.subtitle2,
-            fontSize = 15.sp,
-            modifier = Modifier.padding(start = 20.dp, bottom = 30.dp)
-        )
-
-        val dateTime = LocalDateTime.now().plusDays(1)
-
-        Text(
-            text = "Expired on ${dateTime.dayOfWeek}, ${dateTime.dayOfMonth} ${dateTime.month} ${dateTime.year} on ${dateTime.hour}:${dateTime.minute}",
-            color = MaterialTheme.colors.primary,
-            style = MaterialTheme.typography.subtitle2,
-            fontSize = 15.sp,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(start = 20.dp, bottom = 50.dp)
-        )
-
         FilledButton(
-            text = "Pay Here",
+            text = "Confirm Your Payment",
             color = Orange400,
             enable = true,
             modifier = Modifier.padding(horizontal = 20.dp),
-            onClick = {
-                navController.navigate(Screen.PaymentDetails.route)
-            }
+            onClick = {}
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PaymentDetailScreenPreview() {
+    TraleCapstoneTheme {
+        PaymentDetailScreen(0, navigateToDetail = {}, navigateBack = {})
     }
 }

@@ -80,7 +80,6 @@ fun RatingTripScreen(
             "Open",
             listOf(Trips(0, "Barongsai", R.drawable.logo_twitter, "desc", 500000)),
             Facilities(0, true, true, true),
-            R.drawable.home_background
         ),
         modifier = modifier,
         navigateBack = navigateBack,

@@ -81,19 +81,14 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
     implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.9"
+    
+    //data store
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
 
-    //retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
-
-    //mockito
-    testImplementation 'org.mockito:mockito-core:3.12.4'
-    testImplementation 'org.mockito:mockito-inline:3.12.4'
-
-    // InstantTaskExecutorRule
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
-
-    //TestDispatcher
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
+    //library AsyncHttpClient LoopJ
+    implementation 'com.loopj.android:android-async-http:1.4.9'
 
 }

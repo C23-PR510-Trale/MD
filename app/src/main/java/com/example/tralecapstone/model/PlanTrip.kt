@@ -10,5 +10,4 @@ data class PlanTrip(
     val openStatus: String,
     val trips: List<Trips>,
     val facilities: Facilities,
-    val prevTrips : Int,
 )

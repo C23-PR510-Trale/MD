@@ -1,5 +1,6 @@
 package com.example.tralecapstone.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -51,7 +52,9 @@ fun CardHostsItem(
         modifier = Modifier
             .padding(start = 14.dp, end = 24.dp)
             .fillMaxWidth()
-            .clickable { },
+            .clickable {
+                navigateToDetail(hostId)
+            },
         shape = RoundedCornerShape(corner = CornerSize(20.dp)),
         elevation = 4.dp
     ) {
@@ -66,7 +69,7 @@ fun CardHostsItem(
             )
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .width(250.dp)
                     .padding(horizontal = 14.dp)
                     .align(CenterVertically)
             ) {

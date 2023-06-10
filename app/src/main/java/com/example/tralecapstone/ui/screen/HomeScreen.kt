@@ -1,10 +1,13 @@
 package com.example.tralecapstone.ui.screen
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import android.util.Log
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -25,13 +28,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.tralecapstone.di.Injection
 import com.example.tralecapstone.R
+import com.example.tralecapstone.model.Data
 import com.example.tralecapstone.model.PlanTrip
 import com.example.tralecapstone.model.PlanTripRepository
 import com.example.tralecapstone.ui.components.CardHostsItem
 import com.example.tralecapstone.ui.components.EmergencyNumber
 import com.example.tralecapstone.ui.components.SearchBar
+import com.example.tralecapstone.ui.navigation.Screen
 import com.example.tralecapstone.ui.state.UiState
 import com.example.tralecapstone.ui.theme.DarkGrey
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
@@ -46,41 +52,18 @@ fun HomeScreen(
         factory = ViewModelFactory(Injection.provideRepository())
     ),
     navigateToDetail: (Int) -> Unit,
+    navController: NavController
 ) {
-    viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
-        when (uiState) {
-            is UiState.Loading -> {
-                viewModel.getAllPlanTrips()
-            }
-            is UiState.Success -> {
-                HomeContent(
-                    planList = uiState.data,
-                    modifier = modifier,
-                    navigateToDetail = navigateToDetail,
-                )
-            }
-            is UiState.Error -> {}
-        }
-    }
-}
-
-@Composable
-fun HomeContent(
-    planList: List<PlanTrip>,
-    modifier: Modifier = Modifier,
-    navigateToDetail: (Int) -> Unit,
-    viewModel: HomeViewModel = viewModel(factory = ViewModelFactory(PlanTripRepository())),
-) {
-
     val searchResult by viewModel.plantrips.collectAsState()
     val query by viewModel.query
 
-    Box(modifier = Modifier
-        .background(Color.White)
-        .fillMaxSize()
-        .verticalScroll(state = rememberScrollState(), enabled = true),
+    Box(
+        modifier = Modifier
+            .background(Color.White)
+            .fillMaxSize()
+            .verticalScroll(state = rememberScrollState(), enabled = true),
     ) {
-        Box{
+        Box {
             Image(
                 painter = painterResource(id = R.drawable.home_background),
                 modifier = modifier.fillMaxWidth(),
@@ -121,37 +104,34 @@ fun HomeContent(
                         modifier = Modifier
                             .wrapContentWidth()
                             .align(Alignment.CenterEnd)
+                            .clickable {
+                                navController.navigate(Screen.TripRecommendation.route)
+                            }
                     )
                 }
-
-//            LazyHorizontalGrid(
-//                rows = GridCells.Adaptive(160.dp),
-//                contentPadding = PaddingValues(16.dp),
-//                horizontalArrangement = Arrangement.spacedBy(16.dp),
-//                verticalArrangement = Arrangement.spacedBy(16.dp),
-//                modifier = modifier
-//            ) {
-//                items(planList) { data ->
-                CardHostsItem(
-//                        hostId = data.id,
-                    hostId = 0,
-//                        image = data.image,
-                    image = R.drawable.background,
-                    title = "data.title",
-//                        price = data.price,
-                    price = 100000,
-//                        rating = data.rating,
-                    rating = 4.5,
-//                    category = data.category,
-                    category = "culinary",
-//                    openStatus = data.openStatus,
-                    openStatus = "Open",
-                    navigateToDetail = {
-                        navigateToDetail(it)
+                viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
+                    when (uiState) {
+                        is UiState.Loading -> {
+                            viewModel.getAllPlanTrips()
+                        }
+                        is UiState.Success -> {
+                            HomeContent(
+                                listData = uiState.data,
+                                modifier = modifier,
+                                navigateToDetail = navigateToDetail,
+                                navController = navController
+                            )
+                        }
+                        is UiState.Error -> {
+                            Text(
+                                text = uiState.errorMessage,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 18.sp,
+                                modifier = Modifier.padding(top = 30.dp, start = 20.dp, bottom = 20.dp)
+                            )
+                        }
                     }
-                )
-//                }
-//            }
+                }
                 Text(
                     text = "Your Trip Went Wrong? Let Us Know!",
                     fontWeight = FontWeight.SemiBold,
@@ -165,10 +145,39 @@ fun HomeContent(
     }
 }
 
+@Composable
+fun HomeContent(
+    listData: List<Data>,
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    navigateToDetail: (Int) -> Unit,
+    viewModel: HomeViewModel = viewModel(factory = ViewModelFactory(PlanTripRepository())),
+) {
+    LazyRow(
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        items(listData) { data ->
+            CardHostsItem(
+                hostId = data.planTrip.id,
+                image = data.planTrip.image,
+                title = data.planTrip.title,
+                price = data.planTrip.price,
+                rating = data.planTrip.rating,
+                category = data.planTrip.category,
+                openStatus = data.planTrip.openStatus,
+                navigateToDetail = navigateToDetail
+            )
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     TraleCapstoneTheme {
-        HomeScreen(navigateToDetail = {})
+//        HomeScreen(navigateToDetail = {})
     }
 }

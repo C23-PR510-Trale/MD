@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tralecapstone.di.Injection
 import com.example.tralecapstone.R
+import com.example.tralecapstone.model.Data
 import com.example.tralecapstone.model.PlanTrip
 import com.example.tralecapstone.model.PlanTripRepository
 import com.example.tralecapstone.ui.components.CardHostsItem
@@ -72,7 +73,7 @@ fun TripRecommendationScreen(
 
 @Composable
 fun TripRecommendationContent(
-    planList: List<PlanTrip>,
+    planList: List<Data>,
     modifier: Modifier = Modifier,
     navigateBack: () -> Unit,
     navigateToDetail: (Int) -> Unit,

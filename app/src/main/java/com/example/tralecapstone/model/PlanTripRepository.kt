@@ -6,25 +6,25 @@ import kotlinx.coroutines.flow.map
 
 class PlanTripRepository {
     private val plans = mutableListOf<PlanTrip>()
+    private val datas = mutableListOf<Data>()
     private val posts = mutableListOf<Post>()
     private val voluntrips = mutableListOf<Voluntrip>()
 
     init {
-        if (plans.isEmpty()) {
-//            FakeRewardDataSource.dummyRewards.forEach {
-//                orderRewards.add(OrderReward(it, 0))
-//            }
+        if (datas.isEmpty()) {
+            FakePlanTripDataSource.dummyTrip.forEach {
+                datas.add(Data(it, 0))
+            }
         }
     }
 
-    fun getAllPlans(): Flow<List<PlanTrip>> {
-        return flowOf(plans)
+    fun getAllPlans(): Flow<List<Data>> {
+        return flowOf(datas)
     }
 
     fun getAllPosts(): Flow<List<Post>> {
         return flowOf(posts)
     }
-
     fun getAllVoluntrip(): Flow<List<Voluntrip>> {
         return flowOf(voluntrips)
     }
@@ -39,9 +39,9 @@ class PlanTripRepository {
         }
     }
 
-    fun getPlansById(id: Int): PlanTrip {
-        return plans.first {
-            it.id == id
+    fun getPlansById(id: Int): Data {
+        return datas.first {
+            it.planTrip.id == id
         }
     }
 
