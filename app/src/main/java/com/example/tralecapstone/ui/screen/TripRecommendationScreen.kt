@@ -2,6 +2,8 @@ package com.example.tralecapstone.ui.screen
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -52,6 +54,7 @@ fun TripRecommendationScreen(
     ),
     navigateBack: () -> Unit,
     navigateToDetail: (Int) -> Unit,
+    navigateToListTrip: (String) -> Unit,
 ) {
     viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
         when (uiState) {
@@ -64,6 +67,7 @@ fun TripRecommendationScreen(
                     modifier = modifier,
                     navigateBack = navigateBack,
                     navigateToDetail = navigateToDetail,
+                    navigateToListTrip = navigateToListTrip
                 )
             }
             is UiState.Error -> {}
@@ -77,6 +81,7 @@ fun TripRecommendationContent(
     modifier: Modifier = Modifier,
     navigateBack: () -> Unit,
     navigateToDetail: (Int) -> Unit,
+    navigateToListTrip: (String) -> Unit,
     viewModel: HomeViewModel = viewModel(factory = ViewModelFactory(PlanTripRepository())),
 ) {
 
@@ -86,8 +91,7 @@ fun TripRecommendationContent(
             .fillMaxSize()
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             Icon(
                 imageVector = Icons.Rounded.ArrowBackIos,
@@ -113,36 +117,27 @@ fun TripRecommendationContent(
             modifier = modifier
                 .align(CenterHorizontally)
                 .padding(vertical = 20.dp),
-            onClick = {})
-
-//            LazyHorizontalGrid(
-//                rows = GridCells.Adaptive(160.dp),
-//                contentPadding = PaddingValues(16.dp),
-//                horizontalArrangement = Arrangement.spacedBy(16.dp),
-//                verticalArrangement = Arrangement.spacedBy(16.dp),
-//                modifier = modifier
-//            ) {
-//                items(planList) { data ->
-        CardHostsItem(
-//                        hostId = data.id,
-            hostId = 0,
-//                        image = data.image,
-            image = R.drawable.background,
-            title = "data.title",
-//                        price = data.price,
-            price = 100000,
-//                        rating = data.rating,
-            rating = 4.5,
-//                    category = data.category,
-            category = "culinary",
-//                    openStatus = data.openStatus,
-            openStatus = "Open",
-            navigateToDetail = {
-                navigateToDetail(it)
-            }
+            onClick = navigateToListTrip
         )
-//                }
-//            }
+
+        LazyColumn(
+//            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = modifier
+        ) {
+            items(planList) { data ->
+                CardHostsItem(
+                    hostId = data.planTrip.id,
+                    image = data.planTrip.image,
+                    title = data.planTrip.title,
+                    price = data.planTrip.price,
+                    rating = data.planTrip.rating,
+                    category = data.planTrip.category,
+                    openStatus = data.planTrip.openStatus,
+                    navigateToDetail = navigateToDetail
+                )
+            }
+        }
     }
 }
 
@@ -150,6 +145,6 @@ fun TripRecommendationContent(
 @Composable
 fun TripRecommendationScreenPreview() {
     TraleCapstoneTheme {
-        TripRecommendationScreen(navigateToDetail = {}, navigateBack = {})
+        TripRecommendationScreen(navigateToDetail = {}, navigateBack = {}, navigateToListTrip = {})
     }
 }

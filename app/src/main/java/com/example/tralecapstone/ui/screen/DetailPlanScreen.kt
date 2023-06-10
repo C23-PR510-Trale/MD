@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.tralecapstone.R
 import com.example.tralecapstone.di.Injection
 import com.example.tralecapstone.model.Facilities
@@ -230,7 +231,7 @@ fun DetailContent(
                     enable = true,
                     modifier = Modifier.padding(vertical = 20.dp),
                     onClick = {
-                        navController.navigate(Screen.PaymentDetails.route)
+                        navigateToBooking(dataTrip.id)
                     }
                 )
                 val context = LocalContext.current

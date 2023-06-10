@@ -80,6 +80,9 @@ fun TraleApp(
                     },
                     navigateBack = {
                         navController.navigateUp()
+                    },
+                    navigateToListTrip ={category ->
+                        navController.navigate(Screen.TripRectoListTrip.createRoute(category))
                     }
                 )
             }
@@ -88,9 +91,23 @@ fun TraleApp(
                     navigateBack = {
                         navController.navigateUp()
                     },
-                    navigateToListTrip = { category ->
-                        navController.navigate(Screen.AddPlantoListTrip.createRoute(category))
+                    navigateToListTrip ={
+                        navController.navigate(Screen.ListTrip.route)
                     }
+//                    { category ->
+//                        navController.navigate(Screen.AddPlantoListTrip.createRoute(category))
+//                    }
+                )
+            }
+            composable(Screen.ListTrip.route) {
+                ListTripScreen(
+                    navigateBack = {
+                        navController.navigateUp()
+                    },
+                    navigateToDetail = { id ->
+                        navController.navigate(Screen.ListTriptoDetailPlan.createRoute(id))
+                    },
+                    title = "Trip List"
                 )
             }
             composable(Screen.Voluntrip.route) {
@@ -112,6 +129,24 @@ fun TraleApp(
                     }
                 )
             }
+            composable(Screen.PaymentConfirmation.route) {
+                ConfirmationPaymentScreen(
+                    navigateBack = {
+                        navController.navigateUp()
+                    },
+                    navController = navController
+                )
+            }
+            composable(Screen.PaymentDetails.route) {
+                PaymentDetailScreen(
+                    navigateBack = {
+                        navController.navigateUp()
+                    },
+                    navigateToConfPayment = {
+                        navController.navigate(Screen.PaymentConfirmation.route)
+                    }
+                )
+            }
             composable(
                 route = Screen.HometoDetailPlan.route,
                 arguments = listOf(navArgument("idPlan") { type = NavType.IntType }),
@@ -124,48 +159,42 @@ fun TraleApp(
                     navigateBack = {
                         navController.navigateUp()
                     },
-                    navigateToBooking = {
-                        navController.popBackStack()
-                        navController.navigate(Screen.Payment.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    },
-                    onMessageClicked = { message ->
-                        messageHost(context = context, message)
-                    }
-                )
-            }
-//            composable(
-//                route = Screen.HometoDetailPlan.route,
-//                arguments = listOf(navArgument("id") { type = NavType.IntType }),
-//            ) {
-//                val id = it.arguments!!.getInt("id")
-//                val context = LocalContext.current
-//
-//                DetailPlanScreen(
-//                    idPlan = id,
-//                    navigateBack = {
-//                        navController.navigateUp()
-//                    },
-//                    navigateToBooking = {
+                    navigateToBooking = {id->
 //                        navController.popBackStack()
-//                        navController.navigate(Screen.Payment.route) {
+                        navController.navigate(Screen.DetailtoPayment.createRoute(id))
+//                        {
 //                            popUpTo(navController.graph.findStartDestination().id) {
 //                                saveState = true
 //                            }
 //                            launchSingleTop = true
 //                            restoreState = true
 //                        }
-//                    },
-//                    onMessageClicked = { message ->
-//                        messageHost(context = context, message)
-//                    }
-//                )
-//            }
+                    },
+                    onMessageClicked = { message ->
+                        messageHost(context = context, message)
+                    }
+                )
+            }
+            composable(
+                route = Screen.ListTriptoDetailPlan.route,
+                arguments = listOf(navArgument("idPlan") { type = NavType.IntType }),
+            ) {
+                val id = it.arguments!!.getInt("idPlan")
+                val context = LocalContext.current
+
+                DetailPlanScreen(
+                    idPlan = id,
+                    navigateBack = {
+                        navController.navigateUp()
+                    },
+                    navigateToBooking = {id ->
+                        navController.navigate(Screen.DetailtoPayment.createRoute(id))
+                    },
+                    onMessageClicked = { message ->
+                        messageHost(context = context, message)
+                    }
+                )
+            }
             composable(
                 route = Screen.TripRectoDetailPlan.route,
                 arguments = listOf(navArgument("id") { type = NavType.IntType }),
@@ -178,9 +207,67 @@ fun TraleApp(
                     navigateBack = {
                         navController.navigateUp()
                     },
+                    navigateToBooking = {id ->
+                        navController.navigate(Screen.DetailtoPayment.createRoute(id))
+                    },
+                    onMessageClicked = { message ->
+                        messageHost(context = context, message)
+                    }
+                )
+            }
+            composable(
+                route = Screen.TripRectoListTrip.route,
+                arguments = listOf(navArgument("category") { type = NavType.StringType }),
+            ) {
+                val cat = it.arguments!!.getString("category")
+                val context = LocalContext.current
+
+                ListTripScreen(
+                    title = cat!!,
+                    navigateBack = {
+                        navController.navigateUp()
+                    },
+                    navigateToDetail = { id ->
+                        navController.navigate(Screen.ListTriptoDetailPlan.createRoute(id))
+                    },
+                )
+            }
+            composable(
+                route = Screen.DetailtoPayment.route,
+                arguments = listOf(navArgument("idPlan") { type = NavType.IntType }),
+            ) {
+                val id = it.arguments!!.getInt("idPlan")
+                val context = LocalContext.current
+
+                PaymentScreen(
+                    idPlan = id,
+                    navigateBack = {
+                        navController.navigateUp()
+                    },
+                    navController = navController,
+                    navigateToDetail = {id ->
+                        navController.navigate(Screen.PaymenttoDetailPlan.createRoute(id))
+                    },
+                    navigateToPaymentDetails = {
+                        navController.navigate(Screen.PaymentDetails.route)
+                    }
+                )
+            }
+            composable(
+                route = Screen.PaymenttoDetailPlan.route,
+                arguments = listOf(navArgument("idPlan") { type = NavType.IntType }),
+            ) {
+                val id = it.arguments!!.getInt("idPlan")
+                val context = LocalContext.current
+
+                DetailPlanScreen(
+                    idPlan = id,
+                    navigateBack = {
+                        navController.navigateUp()
+                    },
                     navigateToBooking = {
                         navController.popBackStack()
-                        navController.navigate(Screen.Payment.route) {
+                        navController.navigate(Screen.DetailtoPayment.route) {
                             popUpTo(navController.graph.findStartDestination().id) {
                                 saveState = true
                             }
@@ -192,6 +279,7 @@ fun TraleApp(
                         messageHost(context = context, message)
                     }
                 )
+
             }
         }
     }

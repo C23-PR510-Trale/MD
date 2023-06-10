@@ -24,6 +24,7 @@ import androidx.compose.material.icons.rounded.CreditCard
 import androidx.compose.material.icons.rounded.Paid
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
@@ -68,47 +69,11 @@ import java.util.*
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PaymentDetailScreen(
-    idPlan: Int,
+//    idPlan: Int,
     modifier: Modifier = Modifier,
     navigateBack: () -> Unit,
-    navigateToDetail: (Int) -> Unit,
-) {
-//    viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
-//        when (uiState) {
-//            is UiState.Loading -> {
-//                viewModel.getPlanById(idPlan)
-//            }
-//            is UiState.Success -> {
-    PaymentDetailContent(
-//                    planTrip = uiState.data,
-        planTrip = PlanTrip(
-            0,
-            R.drawable.background,
-            "title",
-            100000,
-            4.5,
-            "Culinary",
-            "Open",
-            listOf(Trips(0, "Barongsai", R.drawable.logo_twitter, "desc", 500000)),
-            Facilities(0, true, true, true),
-        ),
-        modifier = modifier,
-        navigateBack = navigateBack,
-        navigateToDetail = navigateToDetail,
-    )
-//            }
-//            is UiState.Error -> {}
-//        }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun PaymentDetailContent(
-    planTrip: PlanTrip,
-    modifier: Modifier = Modifier,
-    navigateBack: () -> Unit,
-    navigateToDetail: (Int) -> Unit,
-    viewModel: DetailViewModel = viewModel(factory = ViewModelFactory(PlanTripRepository())),
+    navigateToConfPayment: () -> Unit,
+//    navigateToDetail: (Int) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -151,11 +116,10 @@ fun PaymentDetailContent(
                 Text(
                     text = "Scan QRIS QR Code",
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.subtitle1.copy(
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colors.primary,
-                    ),
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colors.primary,
                     fontSize = 16.sp,
+                    modifier = Modifier.align(CenterHorizontally)
                 )
 
                 Image(
@@ -164,6 +128,7 @@ fun PaymentDetailContent(
                     contentScale = ContentScale.FillBounds,
                     modifier = Modifier
                         .size(100.dp)
+                        .align(CenterHorizontally)
                         .clip(RoundedCornerShape(20.dp))
                 )
 
@@ -172,20 +137,21 @@ fun PaymentDetailContent(
                     color = MaterialTheme.colors.primary,
                     style = MaterialTheme.typography.subtitle2,
                     fontSize = 14.sp,
+                    modifier = Modifier.align(CenterHorizontally)
                 )
 
                 Text(
                     text = "Enter your Credit Card Details",
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.subtitle1.copy(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colors.primary,
-                    ),
+                    textAlign = TextAlign.Center,
                     fontSize = 16.sp,
+                    modifier = Modifier.align(CenterHorizontally)
                 )
 
                 var name by remember { mutableStateOf("") }
-                var cardNumb by remember { mutableStateOf(0) }
+                var cardNumb by remember { mutableStateOf("") }
                 val focusManager = LocalFocusManager.current
 
                 TextFields(
@@ -208,13 +174,13 @@ fun PaymentDetailContent(
 
 
                 TextFields(
-                    value = cardNumb.toString(),
-                    onValueChange = {cardNumb = if(it == "") 0 else it.toInt()},
+                    value = cardNumb,
+                    onValueChange = { cardNumb = if (it == "") "0" else it },
                     label = "Card Number",
                     color = Yellow,
                     leadingIconImageVector = Icons.Rounded.CreditCard,
                     leadingIconDescription = "input your card number",
-                    showError = !com.example.tralecapstone.ui.components.validateDataRegis(data = cardNumb.toString()),
+                    showError = !com.example.tralecapstone.ui.components.validateDataRegis(data = cardNumb),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Next
@@ -231,15 +197,16 @@ fun PaymentDetailContent(
             color = Orange400,
             enable = true,
             modifier = Modifier.padding(horizontal = 20.dp),
-            onClick = {}
+            onClick = navigateToConfPayment
         )
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun PaymentDetailScreenPreview() {
     TraleCapstoneTheme {
-        PaymentDetailScreen(0, navigateToDetail = {}, navigateBack = {})
+        PaymentDetailScreen(navigateBack = {}, navigateToConfPayment = {})
     }
 }

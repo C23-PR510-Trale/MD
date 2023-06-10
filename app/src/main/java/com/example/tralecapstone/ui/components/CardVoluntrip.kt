@@ -51,8 +51,8 @@ fun CardVoluntripItem(
     Card(
         modifier = Modifier
             .padding(start = 14.dp, end = 24.dp)
-            .fillMaxWidth()
-            .clickable { },
+            .fillMaxWidth(),
+//            .clickable { },
         shape = RoundedCornerShape(corner = CornerSize(20.dp)),
         elevation = 4.dp
     ) {

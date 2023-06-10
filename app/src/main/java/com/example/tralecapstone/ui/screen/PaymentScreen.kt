@@ -67,35 +67,38 @@ fun PaymentScreen(
     ),
     navController: NavController,
     navigateBack: () -> Unit,
+    navigateToPaymentDetails: () -> Unit,
     navigateToDetail: (Int) -> Unit,
 ) {
-//    viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
-//        when (uiState) {
-//            is UiState.Loading -> {
-//                viewModel.getPlanById(idPlan)
-//            }
-//            is UiState.Success -> {
-    PaymentContent(
-//                    planTrip = uiState.data,
-        planTrip = PlanTrip(
-            0,
-            R.drawable.background,
-            "title",
-            100000,
-            4.5,
-            "Culinary",
-            "Open",
-            listOf(Trips(0, "Barongsai", R.drawable.logo_twitter, "desc", 500000)),
-            Facilities(0, true, true, true),
-        ),
-        modifier = modifier,
-        navigateBack = navigateBack,
-        navigateToDetail = navigateToDetail,
-        navController = navController,
-    )
-//            }
-//            is UiState.Error -> {}
-//        }
+    viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
+        when (uiState) {
+            is UiState.Loading -> {
+                viewModel.getPlanById(idPlan)
+            }
+            is UiState.Success -> {
+                PaymentContent(
+                    planTrip = uiState.data.planTrip,
+//        planTrip = PlanTrip(
+//            0,
+//            R.drawable.background,
+//            "title",
+//            100000,
+//            4.5,
+//            "Culinary",
+//            "Open",
+//            listOf(Trips(0, "Barongsai", R.drawable.logo_twitter, "desc", 500000)),
+//            Facilities(0, true, true, true),
+//        ),
+                    modifier = modifier,
+                    navigateBack = navigateBack,
+                    navigateToDetail = navigateToDetail,
+                    navController = navController,
+                    navigateToPaymentDetails = navigateToPaymentDetails
+                )
+            }
+            is UiState.Error -> {}
+        }
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -105,6 +108,7 @@ fun PaymentContent(
     modifier: Modifier = Modifier,
     navController: NavController,
     navigateBack: () -> Unit,
+    navigateToPaymentDetails: () -> Unit,
     navigateToDetail: (Int) -> Unit,
     viewModel: DetailViewModel = viewModel(factory = ViewModelFactory(PlanTripRepository())),
 ) {
@@ -135,19 +139,13 @@ fun PaymentContent(
         }
 
         CardHostsItem(
-//                        hostId = data.id,
-            hostId = 0,
-//                        image = data.image,
-            image = R.drawable.background,
-            title = "data.title",
-//                        price = data.price,
-            price = 100000,
-//                        rating = data.rating,
-            rating = 4.5,
-//                    category = data.category,
-            category = "culinary",
-//                    openStatus = data.openStatus,
-            openStatus = "Open",
+            hostId = planTrip.id,
+            image = planTrip.image,
+            title = planTrip.title,
+            price = planTrip.price,
+            rating = planTrip.rating,
+            category = planTrip.category,
+            openStatus = planTrip.openStatus,
             navigateToDetail = {
                 navigateToDetail(it)
             }
@@ -183,8 +181,8 @@ fun PaymentContent(
                         fontSize = 14.sp,
                     )
                     Text(
-                        text = stringResource(R.string.price, 500000),
-//                        text = stringResource(R.string.price, planTrip.price),
+//                        text = stringResource(R.string.price, 500000),
+                        text = stringResource(R.string.price, planTrip.price),
                         color = MaterialTheme.colors.primary,
                         textAlign = TextAlign.End,
                         style = MaterialTheme.typography.subtitle2,
@@ -232,10 +230,8 @@ fun PaymentContent(
         Text(
             text = "Transfer Here",
             overflow = TextOverflow.Ellipsis,
-//            style = MaterialTheme.typography.subtitle1.copy(
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colors.primary,
-//            ),
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colors.primary,
             fontSize = 16.sp,
             modifier = Modifier.padding(start = 20.dp, bottom = 6.dp)
         )
@@ -243,7 +239,6 @@ fun PaymentContent(
         Text(
             text = "1234 567 891 011 a.n Aghni Qisthi",
             color = MaterialTheme.colors.primary,
-//            style = MaterialTheme.typography.subtitle2,
             fontSize = 15.sp,
             modifier = Modifier.padding(start = 20.dp, bottom = 30.dp)
         )
@@ -264,9 +259,7 @@ fun PaymentContent(
             color = Orange400,
             enable = true,
             modifier = Modifier.padding(horizontal = 20.dp),
-            onClick = {
-                navController.navigate(Screen.PaymentDetails.route)
-            }
+            onClick = navigateToPaymentDetails
         )
     }
 }

@@ -1,6 +1,9 @@
 package com.example.tralecapstone.ui.screen
 
+import android.view.animation.OvershootInterpolator
 import android.widget.DatePicker
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,7 +19,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -33,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -44,6 +50,7 @@ import com.example.tralecapstone.model.PlanTripRepository
 import com.example.tralecapstone.model.Trips
 import com.example.tralecapstone.ui.components.CardHostsItem
 import com.example.tralecapstone.ui.components.FilledButton
+import com.example.tralecapstone.ui.navigation.Screen
 import com.example.tralecapstone.ui.state.UiState
 import com.example.tralecapstone.ui.theme.Orange400
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
@@ -51,6 +58,7 @@ import com.example.tralecapstone.viewmodel.DetailViewModel
 import com.example.tralecapstone.viewmodel.HistoryViewModel
 import com.example.tralecapstone.viewmodel.HomeViewModel
 import com.example.tralecapstone.viewmodel.ViewModelFactory
+import kotlinx.coroutines.delay
 import okhttp3.internal.uppercase
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -63,7 +71,27 @@ import java.util.*
 fun ConfirmationPaymentScreen(
     modifier: Modifier = Modifier,
     navigateBack: () -> Unit,
+    navController: NavController
 ) {
+    // AnimationEffect
+
+    val scale = remember {
+        Animatable(0f)
+    }
+
+    LaunchedEffect(key1 = true) {
+        scale.animateTo(
+            targetValue = 0.7f,
+            animationSpec = tween(
+                durationMillis = 800,
+                easing = {
+                    OvershootInterpolator(4f).getInterpolation(it)
+                })
+        )
+        delay(3000L)
+        navController.navigate(Screen.Home.route)
+    }
+
     Box(
         modifier = Modifier
             .background(Color.White)
@@ -139,6 +167,6 @@ fun ConfirmationPaymentScreen(
 @Composable
 fun ConfirmationPaymentScreenPreview() {
     TraleCapstoneTheme {
-        ConfirmationPaymentScreen(navigateBack = {})
+//        ConfirmationPaymentScreen(navigateBack = {})
     }
 }

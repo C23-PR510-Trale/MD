@@ -35,6 +35,7 @@ import com.example.tralecapstone.viewmodel.ViewModelFactory
 
 @Composable
 fun ListTripScreen(
+    title :String,
     modifier: Modifier = Modifier,
     viewModel: HistoryViewModel = viewModel(
         factory = ViewModelFactory(Injection.provideRepository())
@@ -53,7 +54,7 @@ fun ListTripScreen(
                     modifier = modifier,
                     navigateBack = navigateBack,
                     navigateToDetail = navigateToDetail,
-                    title = "Trip History"
+                    title = title
                 )
             }
             is UiState.Error -> {}
@@ -96,26 +97,24 @@ fun ListTripContent(
                     .align(Alignment.Center)
                     .padding(horizontal = 10.dp, vertical = 16.dp)
             )
+        }
 
-            LazyColumn(
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = modifier
-            ) {
-                items(planList) { data ->
-                    CardHostsItem(
-                        hostId = data.planTrip.id,
-                        image = data.planTrip.image,
-                        title = data.planTrip.title,
-                        price = data.planTrip.price,
-                        rating = data.planTrip.rating,
-                        category = data.planTrip.category,
-                        openStatus = data.planTrip.openStatus,
-                        navigateToDetail = {
-                            navigateToDetail(it)
-                        }
-                    )
-                }
+        LazyColumn(
+//            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = modifier
+        ) {
+            items(planList) { data ->
+                CardHostsItem(
+                    hostId = data.planTrip.id,
+                    image = data.planTrip.image,
+                    title = data.planTrip.title,
+                    price = data.planTrip.price,
+                    rating = data.planTrip.rating,
+                    category = data.planTrip.category,
+                    openStatus = data.planTrip.openStatus,
+                    navigateToDetail = navigateToDetail
+                )
             }
         }
     }
@@ -125,6 +124,6 @@ fun ListTripContent(
 @Composable
 fun ListTripScreenPreview() {
     TraleCapstoneTheme {
-        ListTripScreen(navigateToDetail = {}, navigateBack = {})
+        ListTripScreen(navigateToDetail = {}, navigateBack = {}, title = "History Trip")
     }
 }

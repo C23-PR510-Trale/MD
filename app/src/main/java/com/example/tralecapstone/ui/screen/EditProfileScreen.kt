@@ -49,14 +49,14 @@ fun EditProfileScreen(
                 .verticalScroll(state = rememberScrollState(), enabled = true)
                 .padding(10.dp),
         ) {
-            Icon(
-                imageVector = Icons.Rounded.ArrowBackIos,
-                contentDescription = stringResource(id = R.string.click_back),
-                modifier = Modifier
-                    .padding(16.dp)
-                    .clickable { navigateBack() }
-                    .align(Alignment.Start)
-            )
+//            Icon(
+//                imageVector = Icons.Rounded.ArrowBackIos,
+//                contentDescription = stringResource(id = R.string.click_back),
+//                modifier = Modifier
+//                    .padding(16.dp)
+//                    .clickable { navigateBack() }
+//                    .align(Alignment.Start)
+//            )
 
             Image(
                 painter = painterResource(id = R.drawable.ic_launcher_background),
@@ -271,13 +271,13 @@ fun EditProfileScreen(
                 ) false
                 else true
             )
-
-            Spacer(modifier = Modifier.padding(vertical = 16.dp))
-
-            FilledButton(
-                text = "Settings", color = Yellow, onClick = {},
-                enable = true
-            )
+//
+//            Spacer(modifier = Modifier.padding(vertical = 16.dp))
+//
+//            FilledButton(
+//                text = "Settings", color = Yellow, onClick = {},
+//                enable = true
+//            )
 
             Spacer(modifier = Modifier.padding(vertical = 16.dp))
 

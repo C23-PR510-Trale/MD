@@ -48,7 +48,8 @@ import java.util.*
 @Composable
 fun AddPlanScreen(
     navigateBack: () -> Unit,
-    navigateToListTrip: (String) -> Unit,
+//    navigateToListTrip: (String) -> Unit,
+    navigateToListTrip: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -165,7 +166,8 @@ fun AddPlanScreen(
                 Toast.makeText(context, "${date.value} $budget $destination $preference1 $preference2", Toast.LENGTH_SHORT).show()
 
                 //bagian ini masi bingung parameternya kek apa gatau dah gajelas
-                navigateToListTrip(preference1)
+//                navigateToListTrip(preference1)
+                navigateToListTrip()
             }
         }
     }

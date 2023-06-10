@@ -24,7 +24,7 @@ import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
 
 @Composable
 fun TripCategories(
-    onClick: () -> Unit,
+    onClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -38,6 +38,7 @@ fun TripCategories(
                     Toast
                         .makeText(context, "landmark", Toast.LENGTH_SHORT)
                         .show()
+                    onClick("Landmark")
                 },
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -54,7 +55,14 @@ fun TripCategories(
             )
         }
         Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clickable {
+                    Toast
+                        .makeText(context, "culinary", Toast.LENGTH_SHORT)
+                        .show()
+                    onClick("Culinary")
+                },
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
@@ -72,7 +80,14 @@ fun TripCategories(
             )
         }
         Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clickable {
+                    Toast
+                        .makeText(context, "nature", Toast.LENGTH_SHORT)
+                        .show()
+                    onClick("Nature")
+                },
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
@@ -90,7 +105,14 @@ fun TripCategories(
             )
         }
         Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clickable {
+                    Toast
+                        .makeText(context, "cultural", Toast.LENGTH_SHORT)
+                        .show()
+                    onClick("Cultural")
+                },
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
