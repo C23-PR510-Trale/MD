@@ -1,5 +1,7 @@
 # TRALE IN MOBILE DEVELOPMENT 
-Application Screenshots
+Trale App is an application special for backpackers and all the travelers who want to plan their trips better. Users can give the application their own preferences and also the budget they have. Then, Trale will give you a bunch of recommended trips (from our machine learning) that will be sent to our cloud (the result will be return using Retrofit). We develop Android UI using the newest Android library, Jetpack Compose, to make sure User can feels comfortable while using our application. 
+
+## Application Screenshots
 
 ![WhatsApp Image 2023-06-16 at 9 01 04 PM (1)](https://github.com/C23-PR510-Trale/MD/assets/85933511/f937727e-152e-4685-98dd-4abb09d56dad)
 ![WhatsApp Image 2023-06-16 at 9 01 04 PM](https://github.com/C23-PR510-Trale/MD/assets/85933511/e9ad399e-5081-4cb0-b48b-f37e94c59819)
