@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.example.tralecapstone.model.network.ApiServiceJS
 import com.example.tralecapstone.model.repository.AuthRepository
+import com.example.tralecapstone.model.request.EditProfile
 import com.example.tralecapstone.model.request.LoginRequest
 import com.example.tralecapstone.model.request.RegisterRequest
 import com.example.tralecapstone.model.response.EditProfileResponse
@@ -61,10 +62,10 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun editProfile(user: User, pass: String) {
+    fun editProfile(user: EditProfile, token: String) {
         loginInProgress.value = true
         viewModelScope.launch {
-            val result = authRepository.editProfile(user, pass)
+            val result = authRepository.editProfile(user, token)
             _edit.value = result
             editInProgress.value = false
             Log.d("cek edit authvm", "success : ${result.value}")

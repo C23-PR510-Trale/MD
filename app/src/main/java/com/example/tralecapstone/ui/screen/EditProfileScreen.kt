@@ -39,11 +39,17 @@ import com.example.tralecapstone.R
 import com.example.tralecapstone.datastore.DataPreferences
 import com.example.tralecapstone.datastore.PreferenceViewModel
 import com.example.tralecapstone.datastore.ViewModelFactoryDataStore
+import com.example.tralecapstone.di.Injection
+import com.example.tralecapstone.model.request.EditProfile
+import com.example.tralecapstone.model.response.User
 import com.example.tralecapstone.ui.components.DATASTORE
 import com.example.tralecapstone.ui.components.FilledButton
 import com.example.tralecapstone.ui.components.TextFields
+import com.example.tralecapstone.ui.state.UiState
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
 import com.example.tralecapstone.ui.theme.Yellow
+import com.example.tralecapstone.viewmodel.AuthViewModel
+import com.example.tralecapstone.viewmodel.ViewModelFactoryAuth
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATASTORE)
 
@@ -240,6 +246,10 @@ fun EditProfileScreen(
                     .padding(vertical = 50.dp)
             )
 
+            val authVM: AuthViewModel = viewModel(
+                factory = ViewModelFactoryAuth(Injection.provideRepositoryAuth(LocalContext.current.dataStore))
+            )
+
             FilledButton(
                 text = "Save Data", color = Yellow, onClick = {
                     prefVM.saveSession(
@@ -252,6 +262,18 @@ fun EditProfileScreen(
                         token,
                         passwd
                     )
+                    authVM.editProfile(
+                        EditProfile(
+                            id = idUser,
+                            nama = namaa,
+                            address = addrss,
+                            email = maill,
+                            password = passwd,
+                            telp = telpp,
+                            bio = bioo
+                        ), "bearer $token"
+                    )
+
 //                    Toast.makeText(
 //                        context,
 //                        "$name ; $address ; $telephoneNumber ; $email ; $bio",
@@ -273,6 +295,33 @@ fun EditProfileScreen(
 
             Spacer(modifier = Modifier.padding(vertical = 24.dp))
 
+            val editState by authVM.edit.observeAsState()
+            editState?.let { result ->
+                when (result) {
+                    is UiState.Success -> {
+                        Log.d(
+                            "cek editprof uisuccess",
+                            "success : ${result.data.success} = ${result.data.message}"
+                        )
+                        Toast.makeText(context, "Edit Data Success", Toast.LENGTH_SHORT).show()
+                    }
+
+                    is UiState.Error -> {
+//                            val errorMessage = result.data
+//                            println(errorMessage)
+//                            loginResult?.let {
+//                                Text(text = it.toString())
+//                                Text(text = errorMessage)
+//                            }
+                        Log.d("cek editprof uierror", "error : ${result.errorMessage}")
+                        Toast.makeText(context, "Error: ${result.errorMessage}", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    is UiState.Loading -> {
+                        Log.d("cek editprof uiloading", result.toString())
+                    }
+                }
+            }
         }
     }
 }
