@@ -24,15 +24,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tralecapstone.ui.navigation.TabItem
 import com.example.tralecapstone.R
+import com.example.tralecapstone.ui.components.Login
 import com.example.tralecapstone.ui.theme.*
+import com.example.tralecapstone.viewmodel.AuthViewModel
 import com.google.accompanist.pager.*
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun MainContent(modifier: Modifier = Modifier) {
+fun AuthScreen(modifier: Modifier = Modifier, navigateBack : () -> Unit) {
 
     val list = listOf(TabItem.Register, TabItem.Login)
     val pagerState = rememberPagerState(initialPage = 0)
@@ -53,6 +57,9 @@ fun MainContent(modifier: Modifier = Modifier) {
         )
         Tabs(tabs = list, pagerState = pagerState)
         TabContent(tabs = list, pagerState = pagerState)
+
+        val status : Boolean = Login()
+        if(status) navigateBack()
     }
 }
 
@@ -109,6 +116,6 @@ fun TabContent(tabs: List<TabItem>, pagerState: PagerState) {
 @Composable
 fun AuthScreenPreview() {
     TraleCapstoneTheme {
-        MainContent()
+        AuthScreen(navigateBack = {})
     }
 }

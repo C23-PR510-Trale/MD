@@ -1,10 +1,20 @@
 package com.example.tralecapstone.model.response
 
+import com.google.gson.annotations.SerializedName
+
 data class User(
-    var nama : String,
-    var address : String,
-    var telp : String,
-    var email : String,
-    var password : String,
-    var bio : String
+    @SerializedName("address")
+    val address: String,
+    @SerializedName("bio")
+    val bio: String,
+    @SerializedName("email")
+    val email: String,
+    @SerializedName("id")
+    val id: Int,
+    @SerializedName("nama")
+    val nama: String,
+    @SerializedName("telp")
+    val telp: String,
+    @SerializedName("token")
+    val token: String
 )

@@ -1,15 +1,18 @@
 package com.example.tralecapstone.ui.screen
 
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -21,15 +24,28 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tralecapstone.R
+import com.example.tralecapstone.datastore.DataPreferences
+import com.example.tralecapstone.datastore.PreferenceViewModel
+import com.example.tralecapstone.datastore.ViewModelFactoryDataStore
+import com.example.tralecapstone.ui.components.DATASTORE
 import com.example.tralecapstone.ui.components.FilledButton
 import com.example.tralecapstone.ui.components.TextFields
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
 import com.example.tralecapstone.ui.theme.Yellow
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATASTORE)
 
 @Composable
 fun EditProfileScreen(
@@ -49,210 +65,175 @@ fun EditProfileScreen(
                 .verticalScroll(state = rememberScrollState(), enabled = true)
                 .padding(10.dp),
         ) {
-//            Icon(
-//                imageVector = Icons.Rounded.ArrowBackIos,
-//                contentDescription = stringResource(id = R.string.click_back),
-//                modifier = Modifier
-//                    .padding(16.dp)
-//                    .clickable { navigateBack() }
-//                    .align(Alignment.Start)
-//            )
 
-            Image(
-                painter = painterResource(id = R.drawable.ic_launcher_background),
-                modifier = modifier
-                    .size(250.dp)
-                    .clip(CircleShape)
-                    .align(CenterHorizontally),
-                contentDescription = null,
+            Text(
+                text = "Your Profile",
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(CenterHorizontally)
+                    .padding(horizontal = 10.dp, vertical = 16.dp)
             )
-
-            Spacer(modifier = Modifier.padding(vertical = 24.dp))
 
             val context = LocalContext.current
             val focusManager = LocalFocusManager.current
             val scrollState = rememberScrollState()
 
-            var name by remember { mutableStateOf("") }
-            var address by remember { mutableStateOf("") }
-            var telephoneNumber by remember { mutableStateOf("") }
-            var username by remember { mutableStateOf("") }
-            var email by remember { mutableStateOf("") }
-            var instagram by remember { mutableStateOf("") }
-            var twitter by remember { mutableStateOf("") }
-            var otherSocmed by remember { mutableStateOf("") }
-            var bio by remember { mutableStateOf("") }
+            val pref = DataPreferences.getInstance(LocalContext.current.dataStore)
+            val prefVM: PreferenceViewModel = viewModel(
+                factory = ViewModelFactoryDataStore(pref)
+            )
 
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .background(color = Color.White)
-//                    .verticalScroll(state = rememberScrollState(), enabled = true)
-//                    .padding(10.dp),
-//            ) {
+//            val nama = prefVM.getName().collectAsState(initial = "").value
+//            val token by viewModel.getToken().observeAsState()
+
+            var error by remember { mutableStateOf(false) }
+
+            var idUser by remember { mutableStateOf(0) }
+            var token by remember { mutableStateOf("") }
+            var passwd by remember { mutableStateOf("") }
+
+            val id by prefVM.getId().observeAsState()
+            id?.let {
+                idUser = it
+            }
+            val tokens by prefVM.getToken().observeAsState()
+            tokens?.let {
+                token = it
+            }
+            val pass by prefVM.getPassword().observeAsState()
+            pass?.let {
+                passwd = it
+            }
 
             //Name
-            TextFields(
-                value = name,
-                onValueChange = { name = it },
-                label = "Name",
-                color = Yellow,
-                leadingIconImageVector = Icons.Default.Person,
-                leadingIconDescription = "input your name",
-                showError = !validateDataRegis(data = name),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                ),
-                errorMessage = stringResource(id = R.string.name_error)
-            )
+            val nama by prefVM.getName().observeAsState()
+            var namaa by remember { mutableStateOf("") }
+            nama?.let {
+                var name by remember { mutableStateOf(it) }
+//                name = it
+                TextFields(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = "Name",
+                    color = Yellow,
+                    leadingIconImageVector = Icons.Default.Person,
+                    leadingIconDescription = "input your name",
+                    showError = !validateDataRegis(data = name),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    ),
+                    errorMessage = stringResource(id = R.string.name_error)
+                )
+                error = !validateDataRegis(data = name)
+                namaa = name
+            }
 
-            //address
-            TextFields(
-                value = address,
-                onValueChange = { address = it },
-                label = "Address",
-                color = Yellow,
-                leadingIconImageVector = Icons.Default.Home,
-                leadingIconDescription = "input your address",
-                showError = !validateDataRegis(data = address),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                ),
-                errorMessage = stringResource(id = R.string.address_error)
-            )
+//address
+            val addr by prefVM.getAddress().observeAsState()
+            var addrss by remember { mutableStateOf("") }
+            addr?.let {
+                var address by remember { mutableStateOf(it) }
+                TextFields(
+                    value = address,
+                    onValueChange = { address = it },
+                    label = "Address",
+                    color = Yellow,
+                    leadingIconImageVector = Icons.Default.Home,
+                    leadingIconDescription = "input your address",
+                    showError = !validateDataRegis(data = address),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    ),
+                    errorMessage = stringResource(id = R.string.address_error)
+                )
+                error = !validateDataRegis(data = address)
+                addrss = address
+            }
 
             //telephone number
-            TextFields(
-                value = telephoneNumber,
-                onValueChange = { telephoneNumber = it },
-                label = "Telephone Number",
-                color = Yellow,
-                leadingIconImageVector = Icons.Default.Phone,
-                leadingIconDescription = "input your telephone number",
-                showError = !validateDataRegis(data = telephoneNumber),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                ),
-                errorMessage = stringResource(id = R.string.telpnumb_error)
-            )
-
-            //username
-            TextFields(
-                value = username,
-                onValueChange = { username = it },
-                label = "Username",
-                color = Yellow,
-                leadingIconImageVector = Icons.Default.AccountCircle,
-                leadingIconDescription = "input your username",
-                showError = !validateDataRegis(data = username),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                ),
-                errorMessage = stringResource(id = R.string.username_error)
-            )
+            val telp by prefVM.getTelp().observeAsState()
+            var telpp by remember { mutableStateOf("") }
+            telp?.let {
+                var telephoneNumber by remember { mutableStateOf(it) }
+                TextFields(
+                    value = telephoneNumber,
+                    onValueChange = { telephoneNumber = it },
+                    label = "Telephone Number",
+                    color = Yellow,
+                    leadingIconImageVector = Icons.Default.Phone,
+                    leadingIconDescription = "input your telephone number",
+                    showError = !validateDataRegis(data = telephoneNumber),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    ),
+                    errorMessage = stringResource(id = R.string.telpnumb_error)
+                )
+                error = !validateDataRegis(data = telephoneNumber)
+                telpp = telephoneNumber
+            }
 
             //email
-            TextFields(
-                value = email,
-                onValueChange = { email = it },
-                label = "Email",
-                color = Yellow,
-                leadingIconImageVector = Icons.Default.Email,
-                leadingIconDescription = "input your email",
-                showError = !validateEmailRegis(email = email),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                ),
-                errorMessage = stringResource(id = R.string.email_error)
-            )
+            val mail by prefVM.getEmail().observeAsState()
+            var maill by remember { mutableStateOf("") }
+            mail?.let {
+                var email by remember { mutableStateOf(it) }
+                TextFields(
+                    value = email,
+                    onValueChange = { email = it },
+                    label = "Email",
+                    color = Yellow,
+                    leadingIconImageVector = Icons.Default.Email,
+                    leadingIconDescription = "input your email",
+                    showError = !validateEmailRegis(email = email),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    ),
+                    errorMessage = stringResource(id = R.string.email_error)
+                )
+                error = !validateEmailRegis(email = email)
+                maill = email
+            }
 
-            //instagram
-            TextFields(
-                value = instagram,
-                onValueChange = { instagram = it },
-                label = "Instagram",
-                color = Yellow,
-                leadingIconImageVector = null,
-                leadingIconDescription = "input your instagram account",
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                ),
-            )
-
-            //twitter
-            TextFields(
-                value = twitter,
-                onValueChange = { twitter = it },
-                label = "Twitter",
-                color = Yellow,
-                leadingIconImageVector = null,
-                leadingIconDescription = "input your twitter account",
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                ),
-            )
-
-            //other acc
-            TextFields(
-                value = otherSocmed,
-                onValueChange = { otherSocmed = it },
-                label = "Other Social Media",
-                color = Yellow,
-                leadingIconImageVector = null,
-                leadingIconDescription = "input your other account",
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                ),
-            )
-
-            //bio
-            TextFields(
-                value = bio,
-                onValueChange = { bio = it },
-                label = "Bio",
-                color = Yellow,
-                leadingIconImageVector = null,
-                leadingIconDescription = "input bio",
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                ),
-            )
+            val bios by prefVM.getBio().observeAsState()
+            var bioo by remember { mutableStateOf("") }
+            bios?.let {
+                var bio by remember { mutableStateOf(it) }
+                TextFields(
+                    value = bio,
+                    onValueChange = { bio = it },
+                    label = "Bio",
+                    color = Yellow,
+                    leadingIconImageVector = null,
+                    leadingIconDescription = "input bio",
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    ),
+                )
+                bioo = bio
+            }
 
             Spacer(
                 modifier = Modifier
@@ -260,32 +241,38 @@ fun EditProfileScreen(
             )
 
             FilledButton(
-                text = "Save Data", color = Yellow, onClick = {},
-                enable =
-                if (
-                    !validateDataRegis(data = name)
-                    || !validateDataRegis(data = address)
-                    || !validateDataRegis(data = telephoneNumber)
-                    || !validateDataRegis(data = username)
-                    || !validateEmailRegis(email = email)
-                ) false
-                else true
+                text = "Save Data", color = Yellow, onClick = {
+                    prefVM.saveSession(
+                        idUser,
+                        namaa,
+                        addrss,
+                        maill,
+                        telpp,
+                        bioo,
+                        token,
+                        passwd
+                    )
+//                    Toast.makeText(
+//                        context,
+//                        "$name ; $address ; $telephoneNumber ; $email ; $bio",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+                },
+                enable = if (error) false else true
             )
-//
-//            Spacer(modifier = Modifier.padding(vertical = 16.dp))
-//
-//            FilledButton(
-//                text = "Settings", color = Yellow, onClick = {},
-//                enable = true
-//            )
 
             Spacer(modifier = Modifier.padding(vertical = 16.dp))
 
             FilledButton(
-                text = "Logout", color = Yellow, onClick = {},
+                text = "Logout", color = Yellow, onClick = {
+                    prefVM.clearSession()
+                    navigateBack()
+                },
                 enable = true
             )
-//            }
+
+            Spacer(modifier = Modifier.padding(vertical = 24.dp))
+
         }
     }
 }

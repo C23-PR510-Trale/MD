@@ -1,7 +1,6 @@
 package com.example.tralecapstone.model.response
 
-data class RegisterResponse(
-    val data: DataRegis,
+data class EditProfileResponse(
     val success: Int,
     val message:String,
 )

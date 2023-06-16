@@ -1,5 +1,7 @@
 package com.example.tralecapstone.ui
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -11,23 +13,32 @@ import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.PersonPin
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.DarkGray
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.tralecapstone.R
+import com.example.tralecapstone.datastore.DataPreferences
+import com.example.tralecapstone.datastore.PreferenceViewModel
+import com.example.tralecapstone.datastore.ViewModelFactoryDataStore
+import com.example.tralecapstone.di.Injection
+import com.example.tralecapstone.ui.components.dataStore
 import com.example.tralecapstone.ui.navigation.NavigationItem
 import com.example.tralecapstone.ui.navigation.Screen
-import com.example.tralecapstone.ui.theme.Poppins
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
+import com.example.tralecapstone.viewmodel.ViewModelFactoryAuth
 
 @Composable
 fun BottomBar(navController: NavHostController) {
@@ -36,6 +47,23 @@ fun BottomBar(navController: NavHostController) {
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
+
+        val pref = DataPreferences.getInstance(LocalContext.current.dataStore)
+        val prefVM : PreferenceViewModel = viewModel(
+            factory = ViewModelFactoryDataStore(pref)
+        )
+
+        val token by prefVM.getToken().observeAsState()
+        val name by prefVM.getName().observeAsState()
+        var loginState = false
+
+        name?.let {
+            Log.d("cek name result", it.toString())
+        }
+        token?.let { result ->
+            Log.d("cek token result", result.toString())
+            if(result.isNotBlank() && result.isNotEmpty()) loginState = true
+        }
 
         val navigationItems = listOf(
             NavigationItem(
@@ -49,14 +77,9 @@ fun BottomBar(navController: NavHostController) {
                 screen = Screen.Voluntrip
             ),
             NavigationItem(
-                title = stringResource(R.string.menu_community),
-                icon = Icons.Rounded.Forum,
-                screen = Screen.Community
-            ),
-            NavigationItem(
                 title = stringResource(R.string.menu_profile),
                 icon = Icons.Default.AccountCircle,
-                screen = Screen.Profile
+                screen = if(!loginState) Screen.Auth else Screen.Profile
             ),
         )
 

@@ -1,4 +1,4 @@
-package com.example.tralecapstone.model
+package com.example.tralecapstone.model.data
 
 data class Post(
     val id : Int,

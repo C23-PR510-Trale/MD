@@ -1,7 +1,6 @@
 package com.example.tralecapstone.ui.screen
 
 import android.os.Build
-import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,12 +15,9 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.AccountBox
 import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.material.icons.rounded.CreditCard
-import androidx.compose.material.icons.rounded.Paid
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -41,29 +37,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tralecapstone.R
-import com.example.tralecapstone.di.Injection
-import com.example.tralecapstone.model.Facilities
-import com.example.tralecapstone.model.PlanTrip
-import com.example.tralecapstone.model.PlanTripRepository
-import com.example.tralecapstone.model.Trips
-import com.example.tralecapstone.ui.components.CardHostsItem
 import com.example.tralecapstone.ui.components.FilledButton
 import com.example.tralecapstone.ui.components.TextFields
-import com.example.tralecapstone.ui.state.UiState
 import com.example.tralecapstone.ui.theme.Orange400
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
 import com.example.tralecapstone.ui.theme.Yellow
-import com.example.tralecapstone.viewmodel.DetailViewModel
-import com.example.tralecapstone.viewmodel.HistoryViewModel
-import com.example.tralecapstone.viewmodel.HomeViewModel
-import com.example.tralecapstone.viewmodel.ViewModelFactory
-import okhttp3.internal.uppercase
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.O)

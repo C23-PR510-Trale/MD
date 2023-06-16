@@ -1,26 +1,27 @@
-package com.example.tralecapstone.model
+package com.example.tralecapstone.model.network
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-private const val BASE_URL_PYTHON = "https://story-api.dicoding.dev/v1#/"
+private const val BASE_URL_JS = "https://traledemo-5i4nnps7qq-uc.a.run.app/"
 
-class ApiConfigPython {
+class ApiConfigJS {
     companion object{
-        fun getApiService(): ApiServicePython {
+        fun getApiService(): ApiServiceJS {
             val loggingInterceptor =
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
             val client = OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
                 .build()
             val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL_PYTHON)
+                .baseUrl(BASE_URL_JS)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()
-            return retrofit.create(ApiServicePython::class.java)
+            return retrofit.create(ApiServiceJS::class.java)
         }
     }
 }
+

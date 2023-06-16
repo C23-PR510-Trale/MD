@@ -20,10 +20,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.tralecapstone.ui.BottomBar
+import com.example.tralecapstone.ui.components.Login
+import com.example.tralecapstone.ui.components.Register
 import com.example.tralecapstone.ui.components.floatingActionButtons
 import com.example.tralecapstone.ui.navigation.Screen
 import com.example.tralecapstone.ui.screen.*
-import com.example.tralecapstone.ui.screen.sidefiture.CommunityScreen
 import com.example.tralecapstone.ui.screen.sidefiture.VoluntripScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -65,23 +66,59 @@ fun TraleApp(
             composable(Screen.Splash.route) {
                 SplashScreen(navController = navController)
             }
+//            composable(Screen.Register.route) {
+//                Register(
+//                    onCLick = {
+//                        navController.navigate(Screen.Login.route)
+//                    }
+//                )
+//            }
+//            composable(Screen.Login.route) {
+//                Login(
+//                    onCLick = {
+//                        navController.navigate(Screen.Home.route)
+//                    }
+//                )
+//            }
             composable(Screen.Home.route) {
                 HomeScreen(
-                    navigateToDetail = { id ->
-                        navController.navigate(Screen.HometoDetailPlan.createRoute(id))
+                    navigateToDetail = { budget, preference, numrows, id, title, price, rating, location ->
+                        navController.navigate(
+                            Screen.HometoDetailPlan.createRoute(
+                                budget,
+                                preference,
+                                numrows,
+                                id,
+                                title,
+                                price,
+                                rating,
+                                location
+                            )
+                        )
                     },
                     navController = navController
                 )
             }
             composable(Screen.TripRecommendation.route) {
                 TripRecommendationScreen(
-                    navigateToDetail = { id ->
-                        navController.navigate(Screen.TripRectoDetailPlan.createRoute(id))
+                    navigateToDetail = { budget, preference, numrows, id, title, price, rating, location ->
+                        navController.navigate(
+                            Screen.TripRectoDetailPlan.createRoute(
+                                budget,
+                                preference,
+                                numrows,
+                                id,
+                                title,
+                                price,
+                                rating,
+                                location
+                            )
+                        )
                     },
                     navigateBack = {
                         navController.navigateUp()
                     },
-                    navigateToListTrip ={category ->
+                    navigateToListTrip = { category ->
                         navController.navigate(Screen.TripRectoListTrip.createRoute(category))
                     }
                 )
@@ -91,25 +128,31 @@ fun TraleApp(
                     navigateBack = {
                         navController.navigateUp()
                     },
-                    navigateToListTrip ={
-                        navController.navigate(Screen.ListTrip.route)
+                    navigateToListTrip = { budget, preference, numrows ->
+                        navController.navigate(
+                            Screen.AddPlantoListTrip.createRoute(
+                                budget,
+                                preference,
+                                numrows
+                            )
+                        )
                     }
 //                    { category ->
 //                        navController.navigate(Screen.AddPlantoListTrip.createRoute(category))
 //                    }
                 )
             }
-            composable(Screen.ListTrip.route) {
-                ListTripScreen(
-                    navigateBack = {
-                        navController.navigateUp()
-                    },
-                    navigateToDetail = { id ->
-                        navController.navigate(Screen.ListTriptoDetailPlan.createRoute(id))
-                    },
-                    title = "Trip List"
-                )
-            }
+//            composable(Screen.ListTrip.route) {
+//                ListTripScreen(
+//                    navigateBack = {
+//                        navController.navigateUp()
+//                    },
+//                    navigateToDetail = { id ->
+//                        navController.navigate(Screen.ListTriptoDetailPlan.createRoute(id))
+//                    },
+//                    title = "Trip List"
+//                )
+//            }
             composable(Screen.Voluntrip.route) {
                 VoluntripScreen()
 //                val context = LocalContext.current
@@ -119,8 +162,14 @@ fun TraleApp(
 //                    }
 //                )
             }
-            composable(Screen.Community.route) {
-                CommunityScreen()
+            composable(Screen.Auth.route) {
+                AuthScreen(
+                    navigateBack = {
+                        navController.navigateUp()
+                    })
+            }
+            composable(Screen.Login.route) {
+                Login(/*navigateBack = navController.navigateUp()*/)
             }
             composable(Screen.Profile.route) {
                 EditProfileScreen(
@@ -149,26 +198,52 @@ fun TraleApp(
             }
             composable(
                 route = Screen.HometoDetailPlan.route,
-                arguments = listOf(navArgument("idPlan") { type = NavType.IntType }),
+                arguments = listOf(
+                    navArgument("budget") { type = NavType.IntType },
+                    navArgument("preference") { type = NavType.StringType },
+                    navArgument("numrows") { type = NavType.IntType },
+                    navArgument("idPlan") { type = NavType.IntType },
+                    navArgument("title") { type = NavType.StringType },
+                    navArgument("price") { type = NavType.FloatType },
+                    navArgument("rating") { type = NavType.FloatType },
+                    navArgument("location") { type = NavType.StringType },
+                ),
             ) {
-                val id = it.arguments!!.getInt("idPlan")
+                val budget = it.arguments!!.getInt("budget")
+                val preference = it.arguments!!.getString("preference")
+                val numrows = it.arguments!!.getInt("numrows")
+                val idPlan = it.arguments!!.getInt("idPlan")
+                val title = it.arguments!!.getString("title")
+                val price = it.arguments!!.getFloat("price").toDouble()
+                val rating = it.arguments!!.getFloat("rating").toDouble()
+                val location = it.arguments!!.getString("location")
                 val context = LocalContext.current
 
                 DetailPlanScreen(
-                    idPlan = id,
+                    budget = budget,
+                    preference = preference!!,
+                    numrows = numrows,
+                    idPlan = idPlan,
+                    title = title!!,
+                    price = price,
+                    rating = rating,
+                    location = location!!,
                     navigateBack = {
                         navController.navigateUp()
                     },
-                    navigateToBooking = {id->
-//                        navController.popBackStack()
-                        navController.navigate(Screen.DetailtoPayment.createRoute(id))
-//                        {
-//                            popUpTo(navController.graph.findStartDestination().id) {
-//                                saveState = true
-//                            }
-//                            launchSingleTop = true
-//                            restoreState = true
-//                        }
+                    navigateToBooking = { budget, preference, numrows, id, title, price, rating, location ->
+                        navController.navigate(
+                            Screen.DetailtoPayment.createRoute(
+                                budget,
+                                preference,
+                                numrows,
+                                id,
+                                title,
+                                price,
+                                rating,
+                                location
+                            )
+                        )
                     },
                     onMessageClicked = { message ->
                         messageHost(context = context, message)
@@ -176,19 +251,94 @@ fun TraleApp(
                 )
             }
             composable(
-                route = Screen.ListTriptoDetailPlan.route,
-                arguments = listOf(navArgument("idPlan") { type = NavType.IntType }),
+                route = Screen.AddPlantoListTrip.route,
+                arguments = listOf(
+                    navArgument("budget") { type = NavType.IntType },
+                    navArgument("preference") { type = NavType.StringType },
+                    navArgument("numrows") { type = NavType.IntType }
+                ),
             ) {
-                val id = it.arguments!!.getInt("idPlan")
+                val budget = it.arguments!!.getInt("budget")
+                val preference = it.arguments!!.getString("preference")
+                val numrows = it.arguments!!.getInt("numrows")
                 val context = LocalContext.current
 
-                DetailPlanScreen(
-                    idPlan = id,
+                ListTripScreen(
+                    title = "Your Preference Trip List",
+                    budget = budget,
+                    preference = preference!!,
+                    numrows = numrows,
                     navigateBack = {
                         navController.navigateUp()
                     },
-                    navigateToBooking = {id ->
-                        navController.navigate(Screen.DetailtoPayment.createRoute(id))
+                    navigateToDetail = { budget, preference, numrows, id, title, price, rating, location ->
+                        Log.d(
+                            "cek navdetail",
+                            "b:$budget p:$preference n:$numrows i:$id t:$title p:$price r:$rating l:$location"
+                        )
+                        navController.navigate(
+                            Screen.ListTriptoDetailPlan.createRoute(
+                                budget,
+                                preference,
+                                numrows,
+                                id,
+                                title,
+                                price,
+                                rating,
+                                location
+                            )
+                        )
+                    },
+                )
+            }
+            composable(
+                route = Screen.ListTriptoDetailPlan.route,
+                arguments = listOf(
+                    navArgument("budget") { type = NavType.IntType },
+                    navArgument("preference") { type = NavType.StringType },
+                    navArgument("numrows") { type = NavType.IntType },
+                    navArgument("idPlan") { type = NavType.IntType },
+                    navArgument("title") { type = NavType.StringType },
+                    navArgument("price") { type = NavType.FloatType },
+                    navArgument("rating") { type = NavType.FloatType },
+                    navArgument("location") { type = NavType.StringType },
+                ),
+            ) {
+                val budget = it.arguments!!.getInt("budget")
+                val preference = it.arguments!!.getString("preference")
+                val numrows = it.arguments!!.getInt("numrows")
+                val idPlan = it.arguments!!.getInt("idPlan")
+                val title = it.arguments!!.getString("title")
+                val price = it.arguments!!.getFloat("price").toDouble()
+                val rating = it.arguments!!.getFloat("rating").toDouble()
+                val location = it.arguments!!.getString("location")
+                val context = LocalContext.current
+
+                DetailPlanScreen(
+                    budget = budget,
+                    preference = preference!!,
+                    numrows = numrows,
+                    idPlan = idPlan,
+                    title = title!!,
+                    price = price,
+                    rating = rating,
+                    location = location!!,
+                    navigateBack = {
+                        navController.navigateUp()
+                    },
+                    navigateToBooking = { budget, preference, numrows, idPlan, title, price, rating, location ->
+                        navController.navigate(
+                            Screen.DetailtoPayment.createRoute(
+                                budget,
+                                preference,
+                                numrows,
+                                idPlan,
+                                title,
+                                price,
+                                rating,
+                                location
+                            )
+                        )
                     },
                     onMessageClicked = { message ->
                         messageHost(context = context, message)
@@ -197,18 +347,52 @@ fun TraleApp(
             }
             composable(
                 route = Screen.TripRectoDetailPlan.route,
-                arguments = listOf(navArgument("id") { type = NavType.IntType }),
+                arguments = listOf(
+                    navArgument("budget") { type = NavType.IntType },
+                    navArgument("preference") { type = NavType.StringType },
+                    navArgument("numrows") { type = NavType.IntType },
+                    navArgument("idPlan") { type = NavType.IntType },
+                    navArgument("title") { type = NavType.StringType },
+                    navArgument("price") { type = NavType.FloatType },
+                    navArgument("rating") { type = NavType.FloatType },
+                    navArgument("location") { type = NavType.StringType },
+                ),
             ) {
-                val id = it.arguments!!.getInt("id")
+                val budget = it.arguments!!.getInt("budget")
+                val preference = it.arguments!!.getString("preference")
+                val numrows = it.arguments!!.getInt("numrows")
+                val idPlan = it.arguments!!.getInt("idPlan")
+                val title = it.arguments!!.getString("title")
+                val price = it.arguments!!.getFloat("price").toDouble()
+                val rating = it.arguments!!.getFloat("rating").toDouble()
+                val location = it.arguments!!.getString("location")
                 val context = LocalContext.current
 
                 DetailPlanScreen(
-                    idPlan = id,
+                    budget = budget,
+                    preference = preference!!,
+                    numrows = numrows,
+                    idPlan = idPlan,
+                    title = title!!,
+                    price = price,
+                    rating = rating,
+                    location = location!!,
                     navigateBack = {
                         navController.navigateUp()
                     },
-                    navigateToBooking = {id ->
-                        navController.navigate(Screen.DetailtoPayment.createRoute(id))
+                    navigateToBooking = { budget, preference, numrows, id, title, price, rating, location ->
+                        navController.navigate(
+                            Screen.DetailtoPayment.createRoute(
+                                budget,
+                                preference,
+                                numrows,
+                                id,
+                                title,
+                                price,
+                                rating,
+                                location
+                            )
+                        )
                     },
                     onMessageClicked = { message ->
                         messageHost(context = context, message)
@@ -224,29 +408,62 @@ fun TraleApp(
 
                 ListTripScreen(
                     title = cat!!,
+                    budget = 300000,
+                    numrows = 30,
+                    preference = cat,
                     navigateBack = {
                         navController.navigateUp()
                     },
-                    navigateToDetail = { id ->
-                        navController.navigate(Screen.ListTriptoDetailPlan.createRoute(id))
+                    navigateToDetail = { budget, preference, numrows, id, title, price, rating, location ->
+                        navController.navigate(
+                            Screen.ListTriptoDetailPlan.createRoute(
+                                budget,
+                                preference,
+                                numrows,
+                                id,
+                                title,
+                                price,
+                                rating,
+                                location
+                            )
+                        )
                     },
                 )
             }
             composable(
                 route = Screen.DetailtoPayment.route,
-                arguments = listOf(navArgument("idPlan") { type = NavType.IntType }),
+                arguments = listOf(
+                    navArgument("budget") { type = NavType.IntType },
+                    navArgument("preference") { type = NavType.StringType },
+                    navArgument("numrows") { type = NavType.IntType },
+                    navArgument("idPlan") { type = NavType.IntType },
+                    navArgument("title") { type = NavType.StringType },
+                    navArgument("price") { type = NavType.FloatType },
+                    navArgument("rating") { type = NavType.FloatType },
+                    navArgument("location") { type = NavType.StringType },
+                ),
             ) {
-                val id = it.arguments!!.getInt("idPlan")
+                val budget = it.arguments!!.getInt("budget")
+                val preference = it.arguments!!.getString("preference")
+                val numrows = it.arguments!!.getInt("numrows")
+                val idPlan = it.arguments!!.getInt("idPlan")
+                val title = it.arguments!!.getString("title")
+                val price = it.arguments!!.getFloat("price").toDouble()
+                val rating = it.arguments!!.getFloat("rating").toDouble()
+                val location = it.arguments!!.getString("location")
                 val context = LocalContext.current
 
                 PaymentScreen(
-                    idPlan = id,
+                    idPlan = idPlan,
+                    title = title!!,
+                    price = price,
+                    rating = rating,
+                    category = preference!!,
+                    budget = budget,
+                    numrows = numrows,
+                    location = location!!,
                     navigateBack = {
                         navController.navigateUp()
-                    },
-                    navController = navController,
-                    navigateToDetail = {id ->
-                        navController.navigate(Screen.PaymenttoDetailPlan.createRoute(id))
                     },
                     navigateToPaymentDetails = {
                         navController.navigate(Screen.PaymentDetails.route)
@@ -254,32 +471,25 @@ fun TraleApp(
                 )
             }
             composable(
-                route = Screen.PaymenttoDetailPlan.route,
-                arguments = listOf(navArgument("idPlan") { type = NavType.IntType }),
+                route = Screen.AuthtoHome.route,
             ) {
-                val id = it.arguments!!.getInt("idPlan")
-                val context = LocalContext.current
-
-                DetailPlanScreen(
-                    idPlan = id,
-                    navigateBack = {
-                        navController.navigateUp()
+                HomeScreen(
+                    navigateToDetail = { budget, preference, numrows, id, title, price, rating, location ->
+                        navController.navigate(
+                            Screen.ListTriptoDetailPlan.createRoute(
+                                budget,
+                                preference,
+                                numrows,
+                                id,
+                                title,
+                                price,
+                                rating,
+                                location
+                            )
+                        )
                     },
-                    navigateToBooking = {
-                        navController.popBackStack()
-                        navController.navigate(Screen.DetailtoPayment.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    },
-                    onMessageClicked = { message ->
-                        messageHost(context = context, message)
-                    }
+                    navController = navController
                 )
-
             }
         }
     }

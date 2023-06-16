@@ -3,6 +3,7 @@ package com.example.tralecapstone.ui.screen
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -27,7 +28,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
-    navController : NavController,
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
     val scale = remember {
@@ -48,15 +49,19 @@ fun SplashScreen(
         navController.navigate(Screen.Home.route)
     }
 
-    Box{
+    Box {
         Image(
-            painter = painterResource(id = R.drawable.background),
+            painter = if (isSystemInDarkTheme()) {
+                painterResource(id = R.drawable.background_dark)
+            } else painterResource(id = R.drawable.background),
             modifier = modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
             contentDescription = null,
         )
         Image(
-            painter = painterResource(id = R.drawable.logo_app),
+            painter = if (isSystemInDarkTheme()) {
+                painterResource(id = R.drawable.logoapp_dark)
+            } else painterResource(id = R.drawable.logo_app),
             contentDescription = stringResource(id = R.string.app_name),
             contentScale = ContentScale.Crop,
             modifier = modifier

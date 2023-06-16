@@ -84,9 +84,9 @@ fun TripCategories(
                 .padding(horizontal = 16.dp)
                 .clickable {
                     Toast
-                        .makeText(context, "nature", Toast.LENGTH_SHORT)
+                        .makeText(context, "history", Toast.LENGTH_SHORT)
                         .show()
-                    onClick("Nature")
+                    onClick("History")
                 },
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -98,7 +98,7 @@ fun TripCategories(
                     .clip(CircleShape)
             )
             Text(
-                text = stringResource(R.string.nature),
+                text = stringResource(R.string.history),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.paddingFromBaseline(top = 16.dp, bottom = 8.dp)
@@ -109,9 +109,9 @@ fun TripCategories(
                 .padding(horizontal = 16.dp)
                 .clickable {
                     Toast
-                        .makeText(context, "cultural", Toast.LENGTH_SHORT)
+                        .makeText(context, "culture", Toast.LENGTH_SHORT)
                         .show()
-                    onClick("Cultural")
+                    onClick("Culture")
                 },
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -136,8 +136,8 @@ fun TripCategories(
 @Preview(showBackground = true)
 fun TripCategoriesPreview() {
     TraleCapstoneTheme {
-        TripCategories(
-            { },
-        )
+//        TripCategories(
+//            { },
+//        )
     }
 }

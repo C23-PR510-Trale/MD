@@ -5,12 +5,16 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+
 
 private val LightColorPalette = lightColors(
     primary = Orange400,
     primaryVariant = Orange300,
     secondary = Maroon,
     secondaryVariant = Red200,
+    background = Color.White
 )
 
 private val DarkColorPalette = darkColors(
@@ -18,6 +22,7 @@ private val DarkColorPalette = darkColors(
     primaryVariant = Orange300,
     secondary = Maroon,
     secondaryVariant = Red200,
+    background = DarkGrey,
 
     /* Other default colors to override
     background = Color.White,
@@ -34,9 +39,16 @@ fun TraleCapstoneTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
+    val systemUiController = rememberSystemUiController()
     val colors = if (darkTheme) {
+        systemUiController.setSystemBarsColor(
+            color = Color.Transparent
+        )
         DarkColorPalette
     } else {
+        systemUiController.setSystemBarsColor(
+            color = DarkGrey
+        )
         LightColorPalette
     }
 

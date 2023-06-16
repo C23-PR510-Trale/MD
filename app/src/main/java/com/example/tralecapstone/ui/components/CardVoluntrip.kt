@@ -39,13 +39,15 @@ import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
 
 @Composable
 fun CardVoluntripItem(
-    VtId: Int,
-    title: String,
-    desc:String,
-    price: Int,
-    rating: Double,
     category: String,
     city: String,
+     description: String,
+     event_name: String,
+     id: Int,
+     pelaksanaan: String,
+     price: Int,
+     rating: Int,
+     regis: String,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -79,7 +81,7 @@ fun CardVoluntripItem(
                     )
                 }
                 Text(
-                    text = title,
+                    text = event_name,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.subtitle1.copy(
@@ -89,7 +91,21 @@ fun CardVoluntripItem(
                     fontSize = 16.sp,
                 )
                 Text(
-                    text = desc,
+                    text = description,
+                    color = MaterialTheme.colors.primary,
+                    style = MaterialTheme.typography.subtitle2,
+                    fontSize = 14.sp,
+                )
+
+                Text(
+                    text = stringResource(id = R.string.voluntrip_open_regis, regis),
+                    color = MaterialTheme.colors.primary,
+                    style = MaterialTheme.typography.subtitle2,
+                    fontSize = 14.sp,
+                )
+
+                Text(
+                    text = stringResource(id = R.string.voluntrip_day_h, pelaksanaan),
                     color = MaterialTheme.colors.primary,
                     style = MaterialTheme.typography.subtitle2,
                     fontSize = 14.sp,
@@ -155,13 +171,15 @@ fun CardVoluntripItem(
 fun CardVoluntripItemPreview() {
     TraleCapstoneTheme() {
         CardVoluntripItem(
-            VtId = 1,
-            title = "Title Plan Voluntrip",
-            desc = "Description Voluntrip by Kitabisa akan berkunjung ke Desa Sukalayu, Bandung dan menjadi relawan gypsum painting bareng anak-anak Desa Cukul.",
+            id = 1,
+            event_name = "Title Plan Voluntrip",
+            description = "Description Voluntrip by Kitabisa akan berkunjung ke Desa Sukalayu, Bandung dan menjadi relawan gypsum painting bareng anak-anak Desa Cukul.",
             price = 500000,
-            rating = 3.0,
+            rating = 3,
             category = "Culinary",
             city = "Surabaya",
+            pelaksanaan = "25/08/2020",
+            regis = "30/09/2020"
         )
     }
 }

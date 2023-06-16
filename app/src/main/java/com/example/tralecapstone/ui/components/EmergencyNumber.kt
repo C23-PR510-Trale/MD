@@ -35,14 +35,14 @@ import com.example.tralecapstone.ui.theme.*
 
 @Composable
 fun EmergencyNumber(
-    navigateToDetail: (Int) -> Unit,
+//    navigateToDetail: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = Modifier
             .padding(horizontal = 20.dp)
-            .fillMaxWidth()
-            .clickable { },
+            .fillMaxWidth(),
+//            .clickable { },
         shape = RoundedCornerShape(corner = CornerSize(20.dp)),
         border = BorderStroke(2.dp, Yellow)
     ) {
@@ -92,7 +92,7 @@ fun EmergencyNumber(
 fun EmergencyNumberPreview() {
     TraleCapstoneTheme() {
         EmergencyNumber(
-            navigateToDetail = { },
+//            navigateToDetail = { },
         )
     }
 }

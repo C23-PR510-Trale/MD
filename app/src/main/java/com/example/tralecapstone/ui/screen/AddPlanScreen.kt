@@ -17,6 +17,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.ArrowBackIos
+import androidx.compose.material.icons.rounded.Ballot
 import androidx.compose.material.icons.rounded.Paid
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -48,8 +49,7 @@ import java.util.*
 @Composable
 fun AddPlanScreen(
     navigateBack: () -> Unit,
-//    navigateToListTrip: (String) -> Unit,
-    navigateToListTrip: () -> Unit,
+    navigateToListTrip: (Int, String, Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -69,9 +69,8 @@ fun AddPlanScreen(
     )
 
     var budget by remember{ mutableStateOf(0) }
-    var destination by remember { mutableStateOf("Choose your Destination") }
     var preference1 by remember { mutableStateOf("Choose your Preference 1") }
-    var preference2 by remember { mutableStateOf("Choose your Preference 2") }
+    var numRows by remember { mutableStateOf(0) }
 
     Box(modifier = modifier) {
         Image(
@@ -103,15 +102,15 @@ fun AddPlanScreen(
                 )
             }
 
-            OutlinedButton(
-                onClick = {
-                    datePickerDialog.show()
-                },
-                text = date.value,
-                color = Yellow,
-                enable = true,
-                modifier = Modifier.padding(20.dp)
-            )
+//            OutlinedButton(
+//                onClick = {
+//                    datePickerDialog.show()
+//                },
+//                text = date.value,
+//                color = Yellow,
+//                enable = true,
+//                modifier = Modifier.padding(20.dp)
+//            )
 
             TextFields(
                 value = budget.toString(),
@@ -133,14 +132,6 @@ fun AddPlanScreen(
                     .padding(20.dp)
             )
 
-            destination = DropDownDestination(
-                text = destination,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp)
-                    .clip(RoundedCornerShape(20.dp))
-            )
-
             preference1 = DropDownPreference(
                 text = preference1,
                 modifier = Modifier
@@ -149,25 +140,33 @@ fun AddPlanScreen(
                     .clip(RoundedCornerShape(20.dp))
             )
 
-            preference2 = DropDownPreference(
-                text = preference2,
+            TextFields(
+                value = numRows.toString(),
+                onValueChange = {numRows = if(it == "") 0 else it.toInt()},
+                label = "Datas' Amount to Displayed",
+                color = Yellow,
+                leadingIconImageVector = Icons.Rounded.Ballot,
+                leadingIconDescription = "input your desired data amounts",
+                showError = !com.example.tralecapstone.ui.components.validateDataRegis(data = budget.toString()),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next
+                ), //
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp)
-                    .clip(RoundedCornerShape(20.dp))
             )
 
             FilledButton(
                 modifier = Modifier.padding(20.dp),
                 text = "Continue",
                 color = Color.White,
-                enable = if(destination != "Choose your Destination" && preference1 != "Choose your Preference 1" && preference2 != "Choose your Preference 2") true else false
+                enable = if(preference1 !="Choose your Preference 1") true else false
             ) {
-                Toast.makeText(context, "${date.value} $budget $destination $preference1 $preference2", Toast.LENGTH_SHORT).show()
-
-                //bagian ini masi bingung parameternya kek apa gatau dah gajelas
-//                navigateToListTrip(preference1)
-                navigateToListTrip()
+                navigateToListTrip(budget, preference1, numRows)
             }
         }
     }
@@ -178,6 +177,6 @@ fun AddPlanScreen(
 @Composable
 fun AddPlanScreenPreview() {
     TraleCapstoneTheme() {
-        AddPlanScreen(navigateBack = { }, navigateToListTrip = {})
+//        AddPlanScreen(navigateBack = { }, navigateToListTrip = {})
     }
 }

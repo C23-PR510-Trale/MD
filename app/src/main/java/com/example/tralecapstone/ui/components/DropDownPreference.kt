@@ -73,10 +73,10 @@ fun DropDownPreference(
                     },
                 )
                 DropdownMenuItem(
-                    content = { Text("Nature") },
+                    content = { Text("History") },
                     onClick = {
                         expanded = false
-                        item = "Nature"
+                        item = "History"
                         Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
                     },
                 )

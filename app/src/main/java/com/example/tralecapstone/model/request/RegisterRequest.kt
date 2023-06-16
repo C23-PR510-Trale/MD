@@ -3,16 +3,16 @@ package com.example.tralecapstone.model.request
 import com.google.gson.annotations.SerializedName
 
 data class RegisterRequest(
-    @SerializedName("name")
-    var name: String,
     @SerializedName("address")
-    var address: String,
-    @SerializedName("telephoneNumber")
-    var telephoneNumber: String,
-    @SerializedName("username")
-    var username: String,
+    val address: String,
+    @SerializedName("bio")
+    val bio: String,
     @SerializedName("email")
-    var email: String,
+    val email: String,
+    @SerializedName("nama")
+    val nama: String,
     @SerializedName("password")
-    var password: String
+    val password: String,
+    @SerializedName("telp")
+    val telp: String
 )

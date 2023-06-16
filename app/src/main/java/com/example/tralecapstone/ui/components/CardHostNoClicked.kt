@@ -1,5 +1,6 @@
 package com.example.tralecapstone.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,43 +37,34 @@ import com.example.tralecapstone.ui.theme.Shapes
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
 
 @Composable
-fun PostCommunityItem(
+fun CardHostsNoCLickedItem(
     hostId: Int,
-    image: Int,
     title: String,
-    price: Int,
+    price: Double,
     rating: Double,
+    budget:Int,
     category: String,
-    openStatus: String,
-    navigateToDetail: (Int) -> Unit,
+    numrows:Int,
+    location: String,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = Modifier
-            .padding(start = 14.dp, end = 24.dp)
-            .fillMaxWidth()
-            .clickable { },
+            .padding(20.dp)
+//            .width(300.dp)
+            .fillMaxWidth(),
         shape = RoundedCornerShape(corner = CornerSize(20.dp)),
         elevation = 4.dp
     ) {
-        Row(modifier = Modifier.padding(14.dp)) {
-            Image(
-                painter = painterResource(image),
-                contentDescription = null,
-                contentScale = ContentScale.FillBounds,
-                modifier = Modifier
-                    .size(90.dp)
-                    .clip(RoundedCornerShape(20.dp))
-            )
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 14.dp)
-                    .align(CenterVertically)
+                    .padding(horizontal = 24.dp)
             ) {
+                Spacer(modifier = Modifier.padding(10.dp))
+
                 Text(
                     text = title,
-                    maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.subtitle1.copy(
                         fontWeight = FontWeight.Bold,
@@ -130,32 +122,31 @@ fun PostCommunityItem(
                     )
 
                     Text(
-                        text = openStatus,
+                        text = location,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colors.primary,
                         fontSize = 14.sp,
                         modifier = Modifier.padding(top = 3.dp)
                     )
-
                 }
+                Spacer(modifier = Modifier.padding(10.dp))
+
             }
-        }
     }
 }
 
 @Composable
 @Preview(showBackground = true)
-fun PostCommunityItemPreview() {
+fun CardHostsNoCLickedPreview() {
     TraleCapstoneTheme() {
 //        CardHostsItem(
-//            hostId = 1,
-//            image = R.drawable.logo_app,
+//            0,
 //            title = "Title Plan Hosts",
 //            price = 500000,
 //            rating = 3.0,
 //            category = "Culinary",
-//            openStatus = "Open",
-//            navigateToDetail = { },
+//            location = "Jakarta",
+//            navigateToDetail = ,
 //        )
     }
 }

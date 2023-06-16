@@ -1,13 +1,10 @@
 package com.example.tralecapstone.ui.screen
 
-import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -16,13 +13,9 @@ import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.DarkGray
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -30,76 +23,74 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.example.tralecapstone.R
 import com.example.tralecapstone.di.Injection
-import com.example.tralecapstone.model.Facilities
-import com.example.tralecapstone.model.PlanTrip
-import com.example.tralecapstone.model.PlanTripRepository
-import com.example.tralecapstone.model.Trips
-import com.example.tralecapstone.ui.components.DetailTripsItem
-import com.example.tralecapstone.ui.components.EmergencyNumber
+import com.example.tralecapstone.model.repository.PlanTripRepository
+import com.example.tralecapstone.model.response.Prediction
+import com.example.tralecapstone.ui.components.DATASTORE
 import com.example.tralecapstone.ui.components.FilledButton
-import com.example.tralecapstone.ui.navigation.Screen
+import com.example.tralecapstone.ui.components.dataStore
 import com.example.tralecapstone.ui.state.UiState
-import com.example.tralecapstone.ui.theme.DarkGrey
-import com.example.tralecapstone.ui.theme.Orange300
 import com.example.tralecapstone.ui.theme.Orange400
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
 import com.example.tralecapstone.viewmodel.DetailViewModel
-import com.example.tralecapstone.viewmodel.HomeViewModel
 import com.example.tralecapstone.viewmodel.ViewModelFactory
 
 @Composable
 fun DetailPlanScreen(
+    budget:Int,
+    preference:String,
+    numrows:Int,
     idPlan: Int,
+    title: String,
+    price: Double,
+    rating: Double,
+    location: String,
     onMessageClicked: (String) -> Unit,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DetailViewModel = viewModel(
-        factory = ViewModelFactory(Injection.provideRepository())
+        factory = ViewModelFactory(Injection.provideRepositoryPlanTrip(LocalContext.current.dataStore))
     ),
-    navigateToBooking: (Int) -> Unit,
-) {
-    viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
-        when (uiState) {
-            is UiState.Loading -> {
-                viewModel.getPlanById(idPlan)
-            }
-            is UiState.Success -> {
-                DetailContent(
-//                    dataTrip = PlanTrip(
-//                        0,
-//                    R.drawable.background,
-//                    "title",
-//                    100000,
-//                    4.5,
-//                    "Culinary",
-//                    "Open",
-//                        listOf(Trips(0, "Barongsai", R.drawable.logo_twitter, "desc", 500000)),
-//                        Facilities(0, true, true, true),
-//                    ),
-                    dataTrip = uiState.data.planTrip,
-                    modifier = modifier,
-                    navigateToBooking = navigateToBooking,
-                    navigateBack = navigateBack,
-                    onMessageClicked = onMessageClicked
-                )
-            }
-            is UiState.Error -> {}
-        }
-    }
+    navigateToBooking: (Int, String, Int, Int, String, Float, Float, String) -> Unit,
+    ) {
+    DetailContent(
+        budget=budget,
+        preference=preference,
+        numrows=numrows,
+        planId = idPlan,
+        title = title,
+        price = price,
+        rating = rating,
+        location = location,
+        category = preference,
+        modifier = modifier,
+        navigateToBooking = navigateToBooking,
+        navigateBack = navigateBack,
+        onMessageClicked = onMessageClicked
+    )
 }
 
 @Composable
 fun DetailContent(
-    dataTrip: PlanTrip,
+    budget:Int,
+    preference:String,
+    numrows:Int,
+    planId:Int,
+    title: String,
+    price: Double,
+    rating: Double,
+    location: String,
+    category: String,
     modifier: Modifier = Modifier,
     onMessageClicked: (String) -> Unit,
     navigateBack: () -> Unit,
-    navigateToBooking: (Int) -> Unit,
-    viewModel: DetailViewModel = viewModel(factory = ViewModelFactory(PlanTripRepository())),
+    navigateToBooking: (Int, String, Int, Int, String, Float, Float, String) -> Unit,
+    viewModel: DetailViewModel = viewModel(
+        factory = ViewModelFactory(Injection.provideRepositoryPlanTrip(LocalContext.current.dataStore))
+    ),
 ) {
     Column(
         modifier = Modifier
@@ -107,164 +98,130 @@ fun DetailContent(
             .fillMaxSize()
 //            .verticalScroll(state = rememberScrollState(), enabled = true)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Orange300)
-        ) {
+
+        Box(modifier = Modifier.fillMaxWidth()) {
             Icon(
                 imageVector = Icons.Rounded.ArrowBackIos,
                 contentDescription = stringResource(id = R.string.click_back),
                 modifier = Modifier
                     .padding(16.dp)
                     .clickable { navigateBack() }
-                    .align(CenterVertically)
+                    .align(Alignment.CenterStart)
             )
             Text(
-                text = dataTrip.title,
-                textAlign = TextAlign.Start,
+                text = "Detail Trip Plan",
+                textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(CenterVertically)
-                    .padding(horizontal = 14.dp, vertical = 16.dp)
+                    .align(Alignment.Center)
+                    .padding(horizontal = 10.dp, vertical = 16.dp)
             )
         }
-        LazyColumn(
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = modifier
+
+        Card(
+            modifier = Modifier
+                .padding(14.dp)
+                .fillMaxWidth()
+                .clickable { }
+                .padding(10.dp),
+            shape = RoundedCornerShape(corner = CornerSize(20.dp)),
+            elevation = 4.dp
         ) {
-            items(dataTrip.trips) { data ->
-                DetailTripsItem(
-                    placeId = data.id,
-                    image = data.image,
-                    title = data.placeName,
-                    desc = data.desc,
-                    price = 100000,
-                )
-            }
-            item {
+            Column(
+                modifier = modifier
+                    .padding(20.dp)
+            ) {
                 Text(
-                    text = "Facilities",
+                    text = title,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.subtitle1.copy(
                         fontWeight = FontWeight.ExtraBold,
-                        color = DarkGray,
+                        color = MaterialTheme.colors.primary,
                     ),
                     fontSize = 16.sp,
-                    modifier = Modifier.padding(16.dp)
-                )
-
-                Row(
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .align(CenterHorizontally)
-                ) {
-                    if (dataTrip.facilities.wifi) {
-                        Column(
-                            modifier = Modifier.padding(horizontal = 24.dp)
-                        ) {
-                            Image(
-                                painter = painterResource(R.drawable.icon_wifi),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .requiredSize(70.dp)
-                            )
-                            Text(
-                                text = stringResource(R.string.wifi),
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                modifier = Modifier
-                                    .align(CenterHorizontally)
-                                    .padding(vertical = 10.dp)
-                            )
-                        }
+                        .fillMaxWidth()
+                        .padding(bottom = 10.dp)
+                )
+                Row {
+                    Column {
+                        Text(
+                            text = "Category",
+                            color = MaterialTheme.colors.primary,
+                            style = MaterialTheme.typography.subtitle2,
+                        )
+                        Text(
+                            text = "Budget",
+                            color = MaterialTheme.colors.primary,
+                            style = MaterialTheme.typography.subtitle2,
+                        )
+                        Text(
+                            text = "Rating",
+                            color = MaterialTheme.colors.primary,
+                            style = MaterialTheme.typography.subtitle2,
+                        )
+                        Text(
+                            text = "Location",
+                            color = MaterialTheme.colors.primary,
+                            style = MaterialTheme.typography.subtitle2,
+                        )
                     }
-                    if (dataTrip.facilities.beverage) {
-                        Column(
-                            modifier = Modifier.padding(horizontal = 24.dp)
-                        ) {
-                            Image(
-                                painter = painterResource(R.drawable.icon_beverages),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .requiredSize(70.dp)
-                            )
-                            Text(
-                                text = stringResource(R.string.beverages),
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                modifier = Modifier
-                                    .align(CenterHorizontally)
-                                    .padding(vertical = 10.dp)
-
-                            )
-                        }
-                    }
-                    if (dataTrip.facilities.wifi) {
-                        Column(
-                            modifier = Modifier.padding(horizontal = 24.dp)
-                        ) {
-                            Image(
-                                painter = painterResource(R.drawable.icon_foods),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .requiredSize(70.dp)
-                            )
-                            Text(
-                                text = stringResource(R.string.food),
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                modifier = Modifier
-                                    .align(CenterHorizontally)
-                                    .padding(vertical = 10.dp)
-                            )
-                        }
+                    Column(
+                        modifier = Modifier.padding(horizontal = 30.dp)
+                    ) {
+                        Text(
+                            text = category,
+                            color = MaterialTheme.colors.primary,
+                            fontWeight = FontWeight.SemiBold,
+                            style = MaterialTheme.typography.subtitle2,
+                            fontSize = 14.sp
+                        )
+                        Text(
+                            text = stringResource(R.string.price, price),
+                            color = MaterialTheme.colors.primary,
+                            fontWeight = FontWeight.SemiBold,
+                            style = MaterialTheme.typography.subtitle2,
+                            fontSize = 14.sp
+                        )
+                        Text(
+                            text = rating.toString(),
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colors.primary,
+                            style = MaterialTheme.typography.subtitle2,
+                            fontSize = 14.sp
+                        )
+                        Text(
+                            text = location,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colors.primary,
+                            style = MaterialTheme.typography.subtitle2,
+                            fontSize = 14.sp
+                        )
                     }
                 }
-
-                FilledButton(
-                    text = "Book This Trip",
-                    color = Orange400,
-                    enable = true,
-                    modifier = Modifier.padding(vertical = 20.dp),
-                    onClick = {
-                        navigateToBooking(dataTrip.id)
-                    }
-                )
-                val context = LocalContext.current
-                val shareMessage = "I want to ask about ${dataTrip.title} plan trip"
-
-                FilledButton(
-                    text = "Message Host",
-                    color = Orange400,
-                    enable = true,
-                    onClick = {
-                        onMessageClicked(shareMessage)
-                    }
-                )
             }
         }
 
-//        LazyVerticalGrid(
-//            contentPadding = PaddingValues(16.dp),
-//            verticalArrangement = Arrangement.spacedBy(16.dp),
-//            modifier = modifier
-//        ) {
-//            items(dataTrip.image) { data ->
-//                DetailTripsItem(
-//                    placeId = 0,
-////                placeId = data.id,
-//                    image = R.drawable.ic_launcher_foreground,
-////                image = data.image,
-//                    title = "data.title",
-//                    desc = "m",
-//                    price = 100000,
-//                )
-//            }
-//        }
+        FilledButton(
+            text = "Book This Trip",
+            color = Orange400,
+            enable = true,
+            modifier = Modifier.padding(vertical = 20.dp),
+            onClick = { navigateToBooking(budget, preference, numrows, planId, title, price.toFloat(), rating.toFloat(), location) }
+        )
+        val context = LocalContext.current
+        val shareMessage = "I want to ask about ${title} plan trip"
+
+        FilledButton(
+            text = "Message Host",
+            color = Orange400,
+            enable = true,
+            onClick = {
+                onMessageClicked(shareMessage)
+            }
+        )
     }
 }
 
@@ -272,11 +229,11 @@ fun DetailContent(
 @Composable
 fun DetailPlanScreenPreview() {
     TraleCapstoneTheme {
-        DetailPlanScreen(
-            0,
-            navigateToBooking = {},
-            navigateBack = {},
-            onMessageClicked = {}
-        )
+//        DetailPlanScreen(
+//            0, "", 0, 0.0, "", "",
+//            navigateToBooking = {},
+//            navigateBack = {},
+//            onMessageClicked = {},
+//        )
     }
 }

@@ -39,43 +39,43 @@ import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
 @Composable
 fun CardHostsItem(
     hostId: Int,
-    image: Int,
     title: String,
-    price: Int,
+    price: Double,
     rating: Double,
+    budget:Int,
     category: String,
-    openStatus: String,
-    navigateToDetail: (Int) -> Unit,
+    numrows:Int,
+    location: String,
+    navigateToDetail: (Int, String, Int, Int, String, Float, Float, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = Modifier
-            .padding(start = 14.dp, end = 24.dp)
+//            .width(300.dp)
             .fillMaxWidth()
             .clickable {
-                navigateToDetail(hostId)
+                Log.d("cek cardhost click", price.toString())
+                navigateToDetail(
+                    budget,
+                    category,
+                    numrows,
+                    hostId,
+                    title,
+                    price.toFloat(),
+                    rating.toFloat(),
+                    location,
+                )
             },
         shape = RoundedCornerShape(corner = CornerSize(20.dp)),
         elevation = 4.dp
     ) {
-        Row(modifier = Modifier.padding(14.dp)) {
-            Image(
-                painter = painterResource(image),
-                contentDescription = null,
-                contentScale = ContentScale.FillBounds,
-                modifier = Modifier
-                    .size(90.dp)
-                    .clip(RoundedCornerShape(20.dp))
-            )
             Column(
                 modifier = Modifier
-                    .width(250.dp)
-                    .padding(horizontal = 14.dp)
-                    .align(CenterVertically)
+                    .fillMaxWidth()
+                    .padding(24.dp)
             ) {
                 Text(
                     text = title,
-                    maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.subtitle1.copy(
                         fontWeight = FontWeight.Bold,
@@ -133,16 +133,17 @@ fun CardHostsItem(
                     )
 
                     Text(
-                        text = openStatus,
+                        text = location,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colors.primary,
                         fontSize = 14.sp,
                         modifier = Modifier.padding(top = 3.dp)
                     )
 
+                    Spacer(modifier = Modifier.padding(10.dp))
+
                 }
             }
-        }
     }
 }
 
@@ -150,15 +151,14 @@ fun CardHostsItem(
 @Preview(showBackground = true)
 fun CardHostsPreview() {
     TraleCapstoneTheme() {
-        CardHostsItem(
-            hostId = 1,
-            image = R.drawable.logo_app,
-            title = "Title Plan Hosts",
-            price = 500000,
-            rating = 3.0,
-            category = "Culinary",
-            openStatus = "Open",
-            navigateToDetail = { },
-        )
+//        CardHostsItem(
+//            0,
+//            title = "Title Plan Hosts",
+//            price = 500000,
+//            rating = 3.0,
+//            category = "Culinary",
+//            location = "Jakarta",
+//            navigateToDetail = ,
+//        )
     }
 }
