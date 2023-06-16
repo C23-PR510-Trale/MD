@@ -1,15 +1,10 @@
 package com.example.tralecapstone.ui.screen
 
-import android.app.DatePickerDialog
-import android.icu.util.Calendar
 import android.os.Build
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -26,7 +21,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -39,9 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tralecapstone.R
 import com.example.tralecapstone.ui.components.*
-import com.example.tralecapstone.ui.navigation.Screen
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
-import com.example.tralecapstone.ui.theme.Orange300
 import com.example.tralecapstone.ui.theme.Yellow
 import java.util.*
 
@@ -52,21 +44,7 @@ fun AddPlanScreen(
     navigateToListTrip: (Int, String, Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-    val scrollState = rememberScrollState()
-
-    val calendar = Calendar.getInstance()
-    val year = calendar.get(Calendar.YEAR)
-    val month = calendar.get(Calendar.MONTH)
-    val day = calendar.get(Calendar.DAY_OF_MONTH)
-    val date = remember { mutableStateOf("Choose Your Date") }
-
-    val datePickerDialog = DatePickerDialog(
-        context, { _, year, month, day ->
-            date.value = "$day/$month/$year"
-        }, year, month, day
-    )
 
     var budget by remember{ mutableStateOf(0) }
     var preference1 by remember { mutableStateOf("Choose your Preference 1") }
@@ -119,7 +97,7 @@ fun AddPlanScreen(
                 color = Yellow,
                 leadingIconImageVector = Icons.Rounded.Paid,
                 leadingIconDescription = "input your budget",
-                showError = !com.example.tralecapstone.ui.components.validateDataRegis(data = budget.toString()),
+                showError = !validateDataRegis(data = budget.toString()),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
@@ -147,7 +125,7 @@ fun AddPlanScreen(
                 color = Yellow,
                 leadingIconImageVector = Icons.Rounded.Ballot,
                 leadingIconDescription = "input your desired data amounts",
-                showError = !com.example.tralecapstone.ui.components.validateDataRegis(data = budget.toString()),
+                showError = !validateDataRegis(data = budget.toString()),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
@@ -164,10 +142,10 @@ fun AddPlanScreen(
                 modifier = Modifier.padding(20.dp),
                 text = "Continue",
                 color = Color.White,
-                enable = if(preference1 !="Choose your Preference 1") true else false
-            ) {
+                enable = preference1 !="Choose your Preference 1",
+                onClick = {
                 navigateToListTrip(budget, preference1, numRows)
-            }
+            })
         }
     }
 }
@@ -176,7 +154,6 @@ fun AddPlanScreen(
 @Preview(showBackground = true)
 @Composable
 fun AddPlanScreenPreview() {
-    TraleCapstoneTheme() {
-//        AddPlanScreen(navigateBack = { }, navigateToListTrip = {})
+    TraleCapstoneTheme {
     }
 }

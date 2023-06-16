@@ -48,11 +48,8 @@ import java.util.*
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PaymentDetailScreen(
-//    idPlan: Int,
-    modifier: Modifier = Modifier,
     navigateBack: () -> Unit,
     navigateToConfPayment: () -> Unit,
-//    navigateToDetail: (Int) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -159,7 +156,7 @@ fun PaymentDetailScreen(
                     color = Yellow,
                     leadingIconImageVector = Icons.Rounded.CreditCard,
                     leadingIconDescription = "input your card number",
-                    showError = !com.example.tralecapstone.ui.components.validateDataRegis(data = cardNumb),
+                    showError = !validateDataRegis(data = cardNumb),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Next

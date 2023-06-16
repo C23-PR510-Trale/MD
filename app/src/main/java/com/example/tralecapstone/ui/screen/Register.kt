@@ -1,6 +1,5 @@
-package com.example.tralecapstone.ui.components
+package com.example.tralecapstone.ui.screen
 
-import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -22,22 +21,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.tralecapstone.R
 import com.example.tralecapstone.di.Injection
-import com.example.tralecapstone.model.request.LoginRequest
 import com.example.tralecapstone.model.request.RegisterRequest
-import com.example.tralecapstone.ui.navigation.Screen
+import com.example.tralecapstone.ui.components.FilledButton
+import com.example.tralecapstone.ui.components.TextFields
+import com.example.tralecapstone.ui.components.dataStore
 import com.example.tralecapstone.ui.state.UiState
 import com.example.tralecapstone.ui.theme.Yellow
 import com.example.tralecapstone.viewmodel.AuthViewModel
-import com.example.tralecapstone.viewmodel.ViewModelFactory
 import com.example.tralecapstone.viewmodel.ViewModelFactoryAuth
 
 @Composable
@@ -48,10 +41,7 @@ fun Register(
         factory = ViewModelFactoryAuth(Injection.provideRepositoryAuth(LocalContext.current.dataStore))
     ),
 ) {
-
-    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-    val scrollState = rememberScrollState()
 
     var name by remember { mutableStateOf("") }
     var address by remember { mutableStateOf("") }
@@ -59,7 +49,6 @@ fun Register(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
-    var isPassVisible by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -188,7 +177,6 @@ fun Register(
                 .padding(vertical = 50.dp)
         )
 
-//        val authVM = hiltViewModel<AuthViewModel>()
         val context = LocalContext.current
         val registerState by authVM.register.observeAsState()
 
@@ -203,7 +191,7 @@ fun Register(
                         address = address,
                         telp = telephoneNumber,
                         bio = ""
-                    ), context
+                    )
                 )
                 Log.d("cek register click",
                     authVM.register(
@@ -214,21 +202,18 @@ fun Register(
                             address = address,
                             telp = telephoneNumber,
                             bio = ""
-                        ), context
+                        )
                     ).toString()
                 )
             },
             enable =
-            if (
-                !validateDataRegis(data = name)
-                || !validateDataRegis(data = address)
-                || !validateDataRegis(data = telephoneNumber)
-                || !validateEmailRegis(email = email)
-                || !validatePasswordRegis(password = password)
-                || !validatePasswordRegis(password = confirmPassword)
-                || !password.equals(confirmPassword)
-            ) false
-            else true
+            !(!validateDataRegis(data = name)
+                    || !validateDataRegis(data = address)
+                    || !validateDataRegis(data = telephoneNumber)
+                    || !validateEmailRegis(email = email)
+                    || !validatePasswordRegis(password = password)
+                    || !validatePasswordRegis(password = confirmPassword)
+                    || !password.equals(confirmPassword))
         )
 
         registerState?.let { result ->

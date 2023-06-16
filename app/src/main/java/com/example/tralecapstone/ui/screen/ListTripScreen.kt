@@ -4,18 +4,15 @@ import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -27,12 +24,9 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.tralecapstone.R
 import com.example.tralecapstone.di.Injection
-import com.example.tralecapstone.model.repository.PlanTripRepository
 import com.example.tralecapstone.model.request.AddPlanRequest
 import com.example.tralecapstone.model.response.AddPlanResponse
-import com.example.tralecapstone.model.response.Prediction
 import com.example.tralecapstone.ui.components.CardHostsItem
-import com.example.tralecapstone.ui.components.dataStore
 import com.example.tralecapstone.ui.state.UiState
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
 import com.example.tralecapstone.viewmodel.ListPlanViewModel
@@ -47,7 +41,7 @@ fun ListTripScreen(
     numrows: Int,
     modifier: Modifier = Modifier,
     viewModel: ListPlanViewModel = viewModel(
-        factory = ViewModelFactory(Injection.provideRepositoryPlanTrip(LocalContext.current.dataStore))
+        factory = ViewModelFactory(Injection.provideRepositoryPlanTrip())
     ),
     navigateBack: () -> Unit,
     navigateToDetail: (Int, String, Int, Int, String, Float, Float, String) -> Unit,
@@ -103,10 +97,7 @@ fun ListTripScreen(
                         budget = budget,
                         numrows = numrows,
                         modifier = modifier,
-                        navigateBack = navigateBack,
                         navigateToDetail = navigateToDetail,
-                        title = title,
-//                    viewModel = viewModel
                     )
                 }
                 is UiState.Error -> {}
@@ -117,18 +108,14 @@ fun ListTripScreen(
 
 @Composable
 fun ListTripContent(
-    title: String,
     category: String,
     budget: Int,
     numrows: Int,
     planList: AddPlanResponse,
     modifier: Modifier = Modifier,
-    navigateBack: () -> Unit,
     navigateToDetail: (Int, String, Int, Int, String, Float, Float, String) -> Unit,
-//    viewModel : ListPlanViewModel,
 ) {
     LazyColumn(
-//            contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp),
         modifier = modifier
     ) {

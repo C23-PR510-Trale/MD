@@ -10,15 +10,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -41,7 +37,6 @@ import com.example.tralecapstone.datastore.PreferenceViewModel
 import com.example.tralecapstone.datastore.ViewModelFactoryDataStore
 import com.example.tralecapstone.di.Injection
 import com.example.tralecapstone.model.request.EditProfile
-import com.example.tralecapstone.model.response.User
 import com.example.tralecapstone.ui.components.DATASTORE
 import com.example.tralecapstone.ui.components.FilledButton
 import com.example.tralecapstone.ui.components.TextFields
@@ -85,15 +80,11 @@ fun EditProfileScreen(
 
             val context = LocalContext.current
             val focusManager = LocalFocusManager.current
-            val scrollState = rememberScrollState()
 
             val pref = DataPreferences.getInstance(LocalContext.current.dataStore)
             val prefVM: PreferenceViewModel = viewModel(
                 factory = ViewModelFactoryDataStore(pref)
             )
-
-//            val nama = prefVM.getName().collectAsState(initial = "").value
-//            val token by viewModel.getToken().observeAsState()
 
             var error by remember { mutableStateOf(false) }
 
@@ -273,12 +264,6 @@ fun EditProfileScreen(
                             bio = bioo
                         ), "bearer $token"
                     )
-
-//                    Toast.makeText(
-//                        context,
-//                        "$name ; $address ; $telephoneNumber ; $email ; $bio",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
                 },
                 enable = if (error) false else true
             )
@@ -324,21 +309,6 @@ fun EditProfileScreen(
             }
         }
     }
-}
-
-@Composable
-fun validateDataRegis(data: String): Boolean {
-    var validateData by remember { mutableStateOf(true) }
-    validateData = data.isNotBlank()
-    return validateData
-}
-
-@Composable
-fun validateEmailRegis(email: String): Boolean {
-    var validateData by remember { mutableStateOf(true) }
-    validateData = email.isNotBlank()
-            && email.matches(".*@.*".toRegex())
-    return validateData
 }
 
 @Preview(showBackground = true)

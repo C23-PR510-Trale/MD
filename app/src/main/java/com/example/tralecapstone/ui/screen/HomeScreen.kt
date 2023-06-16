@@ -1,6 +1,5 @@
 package com.example.tralecapstone.ui.screen
 
-import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -26,9 +25,6 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.tralecapstone.R
 import com.example.tralecapstone.di.Injection
-import com.example.tralecapstone.model.request.AddPlanRequest
-import com.example.tralecapstone.model.response.AddPlanResponse
-import com.example.tralecapstone.model.response.Prediction
 import com.example.tralecapstone.model.response.TripsResponse
 import com.example.tralecapstone.ui.components.CardHostsItem
 import com.example.tralecapstone.ui.components.EmergencyNumber
@@ -39,7 +35,6 @@ import com.example.tralecapstone.ui.state.UiState
 import com.example.tralecapstone.ui.theme.DarkGrey
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
 import com.example.tralecapstone.viewmodel.HomeViewModel
-import com.example.tralecapstone.viewmodel.ViewModelFactory
 import com.example.tralecapstone.viewmodel.ViewModelFactoryAuth
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -63,16 +58,12 @@ fun HomeScreen(
             .verticalScroll(state = rememberScrollState(), enabled = true),
     ) {
         Box {
-            if(isSystemInDarkTheme()){
-
-            } else {
                 Image(
                     painter = painterResource(id = R.drawable.home_background),
                     modifier = modifier.fillMaxWidth(),
                     contentScale = ContentScale.FillWidth,
                     contentDescription = null,
                 )
-            }
             Column {
                 SearchBar(query = query, onQueryChange = viewModel::search)
                 Text(
@@ -127,11 +118,8 @@ fun HomeScreen(
                         is UiState.Success -> {
                             HomeContent(
                                 listData = uiState.data,
-                                modifier = modifier,
                                 navigateToDetail = navigateToDetail,
-                                navController = navController,
                                 category = "Culinary",
-                                budget = 500000,
                                 numrows = 20
                             )
                         }
@@ -162,12 +150,8 @@ fun HomeScreen(
 fun HomeContent(
     listData: TripsResponse,
     category :String,
-    budget :Int,
     numrows :Int,
-    modifier: Modifier = Modifier,
-    navController: NavController,
     navigateToDetail: (Int, String,Int, Int, String, Float, Float, String) -> Unit,
-//    viewModel: HomeViewModel = viewModel(factory = ViewModelFactory(PlanTripRepository())),
 ) {
     LazyRow(
         contentPadding = PaddingValues(24.dp),

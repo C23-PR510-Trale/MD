@@ -14,44 +14,29 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.example.tralecapstone.R
-import com.example.tralecapstone.di.Injection
-import com.example.tralecapstone.model.repository.PlanTripRepository
-import com.example.tralecapstone.model.response.AddPlanResponse
-import com.example.tralecapstone.ui.components.CardHostsItem
 import com.example.tralecapstone.ui.components.CardHostsNoCLickedItem
 import com.example.tralecapstone.ui.components.FilledButton
-import com.example.tralecapstone.ui.components.dataStore
-import com.example.tralecapstone.ui.state.UiState
 import com.example.tralecapstone.ui.theme.Orange400
-import com.example.tralecapstone.viewmodel.DetailViewModel
-import com.example.tralecapstone.viewmodel.ViewModelFactory
 import java.time.LocalDateTime
 import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PaymentScreen(
-    idPlan: Int,
     title: String,
     price: Double,
     rating: Double,
     category: String,
-    budget: Int,
-    numrows: Int,
     location: String,
     navigateBack: () -> Unit,
     navigateToPaymentDetails: () -> Unit,
@@ -83,13 +68,10 @@ fun PaymentScreen(
         }
 
         CardHostsNoCLickedItem(
-            hostId = idPlan,
             title = title,
             price = price,
             rating = String.format("%.2f", rating).toDouble(),
-            budget = budget,
             category = category,
-            numrows = numrows,
             location = location,
         )
 

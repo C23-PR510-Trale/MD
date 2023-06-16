@@ -8,5 +8,4 @@ val Maroon = Color(0xFFA00000)
 val Red200 = Color(0xFFFF9776)
 val Orange400 = Color(0xFFE93E00)
 val Orange300 = Color(0xFFF37042)
-val Yellow100 = Color(0xFFFFE2A5)
 

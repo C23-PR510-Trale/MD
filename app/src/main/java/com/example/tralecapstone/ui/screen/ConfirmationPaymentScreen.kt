@@ -38,12 +38,9 @@ import java.util.*
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ConfirmationPaymentScreen(
-    modifier: Modifier = Modifier,
     navigateBack: () -> Unit,
     navController: NavController
 ) {
-    // AnimationEffect
-
     val scale = remember {
         Animatable(0f)
     }

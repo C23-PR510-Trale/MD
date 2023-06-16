@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tralecapstone.model.repository.AuthRepository
-import com.example.tralecapstone.model.repository.PlanTripRepository
 import com.example.tralecapstone.model.response.VoluntripResponse
 import com.example.tralecapstone.ui.state.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +12,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-//@HiltViewModel
 class VoluntripViewModel @Inject constructor(private val repository: AuthRepository) : ViewModel() {
     private val _uiState: MutableStateFlow<UiState<VoluntripResponse>> =
         MutableStateFlow(UiState.Loading)

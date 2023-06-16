@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -19,9 +18,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.tralecapstone.ui.BottomBar
+import com.example.tralecapstone.ui.components.BottomBar
 import com.example.tralecapstone.ui.components.Login
-import com.example.tralecapstone.ui.components.Register
 import com.example.tralecapstone.ui.components.floatingActionButtons
 import com.example.tralecapstone.ui.navigation.Screen
 import com.example.tralecapstone.ui.screen.*
@@ -454,13 +452,10 @@ fun TraleApp(
                 val context = LocalContext.current
 
                 PaymentScreen(
-                    idPlan = idPlan,
                     title = title!!,
                     price = price,
                     rating = rating,
                     category = preference!!,
-                    budget = budget,
-                    numrows = numrows,
                     location = location!!,
                     navigateBack = {
                         navController.navigateUp()

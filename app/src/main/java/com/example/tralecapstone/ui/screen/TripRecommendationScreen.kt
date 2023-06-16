@@ -10,7 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -27,17 +26,13 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.tralecapstone.R
 import com.example.tralecapstone.di.Injection
-import com.example.tralecapstone.model.repository.PlanTripRepository
-import com.example.tralecapstone.model.response.AddPlanResponse
 import com.example.tralecapstone.model.response.TripsResponse
 import com.example.tralecapstone.ui.components.CardHostsItem
 import com.example.tralecapstone.ui.components.TripCategories
 import com.example.tralecapstone.ui.components.dataStore
 import com.example.tralecapstone.ui.state.UiState
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
-import com.example.tralecapstone.viewmodel.ListPlanViewModel
 import com.example.tralecapstone.viewmodel.HomeViewModel
-import com.example.tralecapstone.viewmodel.ViewModelFactory
 import com.example.tralecapstone.viewmodel.ViewModelFactoryAuth
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -95,16 +90,14 @@ fun TripRecommendationScreen(
                         contentDescription = "loading confirmation page",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .align(Alignment.CenterHorizontally)
+                            .align(CenterHorizontally)
                     )
                 }
                 is UiState.Success -> {
                     TripRecommendationContent(
                         listData = uiState.data,
                         modifier = modifier,
-                        navigateBack = navigateBack,
                         navigateToDetail = navigateToDetail,
-                        navigateToListTrip = navigateToListTrip,
                     )
                 }
                 is UiState.Error -> {}
@@ -116,17 +109,10 @@ fun TripRecommendationScreen(
 @Composable
 fun TripRecommendationContent(
     listData: TripsResponse,
-//    category :String,
     modifier: Modifier = Modifier,
-    navigateBack: () -> Unit,
     navigateToDetail: (Int, String, Int, Int, String, Float, Float, String) -> Unit,
-    navigateToListTrip: (String) -> Unit,
-    viewModel: HomeViewModel = viewModel(
-        factory = ViewModelFactoryAuth(Injection.provideRepositoryAuth(LocalContext.current.dataStore))
-    )
 ) {
     LazyColumn(
-//            contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp),
         modifier = modifier
     ) {

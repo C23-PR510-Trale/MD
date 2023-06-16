@@ -19,8 +19,8 @@ fun FilledButton(
     size: Int = 40,
     color: Color,
     enable: Boolean,
-    modifier: Modifier = Modifier,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Button(
         colors = ButtonDefaults.buttonColors(color),

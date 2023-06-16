@@ -1,19 +1,13 @@
 package com.example.tralecapstone.datastore
 
 import android.util.Log
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class PreferenceViewModel(private val pref: DataPreferences) : ViewModel() {
-    fun getSession(): LiveData<String> {
-        return pref.getSession().asLiveData()
-    }
 
     fun getId(): LiveData<Int> {
         return pref.getId().asLiveData()

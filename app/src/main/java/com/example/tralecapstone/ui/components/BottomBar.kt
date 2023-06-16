@@ -1,14 +1,10 @@
-package com.example.tralecapstone.ui
+package com.example.tralecapstone.ui.components
 
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.rounded.Chat
-import androidx.compose.material.icons.rounded.Forum
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.PersonPin
 import androidx.compose.runtime.Composable
@@ -23,7 +19,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -33,12 +28,9 @@ import com.example.tralecapstone.R
 import com.example.tralecapstone.datastore.DataPreferences
 import com.example.tralecapstone.datastore.PreferenceViewModel
 import com.example.tralecapstone.datastore.ViewModelFactoryDataStore
-import com.example.tralecapstone.di.Injection
-import com.example.tralecapstone.ui.components.dataStore
 import com.example.tralecapstone.ui.navigation.NavigationItem
 import com.example.tralecapstone.ui.navigation.Screen
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
-import com.example.tralecapstone.viewmodel.ViewModelFactoryAuth
 
 @Composable
 fun BottomBar(navController: NavHostController) {
@@ -58,10 +50,10 @@ fun BottomBar(navController: NavHostController) {
         var loginState = false
 
         name?.let {
-            Log.d("cek name result", it.toString())
+            Log.d("cek name result", it)
         }
         token?.let { result ->
-            Log.d("cek token result", result.toString())
+            Log.d("cek token result", result)
             if(result.isNotBlank() && result.isNotEmpty()) loginState = true
         }
 

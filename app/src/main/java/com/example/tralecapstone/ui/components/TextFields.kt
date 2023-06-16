@@ -40,7 +40,6 @@ fun TextFields(
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Alignment.Center
     ) {
         OutlinedTextField(
             colors =
@@ -48,9 +47,6 @@ fun TextFields(
             else TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = color),
             value = value,
             onValueChange = { onValueChange(it) },
-//        colors = TextFieldDefaults.textFieldColors(
-//            backgroundColor = Color.White
-//        ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp, bottom = 4.dp, end = 10.dp, start = 10.dp),

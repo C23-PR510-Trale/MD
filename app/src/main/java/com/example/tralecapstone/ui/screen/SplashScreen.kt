@@ -6,7 +6,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -21,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.tralecapstone.MainActivity
 import com.example.tralecapstone.R
-import com.example.tralecapstone.TraleApp
 import com.example.tralecapstone.ui.navigation.Screen
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
 import kotlinx.coroutines.delay

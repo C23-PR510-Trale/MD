@@ -20,11 +20,9 @@ import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
 
 @Composable
 fun CardPayment(
-    paymentId: Int,
     price: Int,
     admin: Int,
     code: Int,
-    navigateToDetail: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -103,13 +101,11 @@ fun CardPayment(
 @Composable
 @Preview(showBackground = true)
 fun CardPaymentPreview() {
-    TraleCapstoneTheme() {
+    TraleCapstoneTheme {
         CardPayment(
-            paymentId = 1,
             price = 500000,
             admin = 3000,
             code = 135,
-            navigateToDetail = { },
         )
     }
 }

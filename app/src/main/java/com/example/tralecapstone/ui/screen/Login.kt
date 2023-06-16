@@ -5,7 +5,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -23,39 +22,26 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.example.tralecapstone.MainActivity
 import com.example.tralecapstone.R
 import com.example.tralecapstone.datastore.DataPreferences
 import com.example.tralecapstone.datastore.PreferenceViewModel
 import com.example.tralecapstone.datastore.ViewModelFactoryDataStore
 import com.example.tralecapstone.di.Injection
 import com.example.tralecapstone.model.request.LoginRequest
-import com.example.tralecapstone.model.response.LoginResponse
-import com.example.tralecapstone.ui.navigation.Screen
-import com.example.tralecapstone.ui.screen.ListTripContent
 import com.example.tralecapstone.ui.screen.validateEmailRegis
 import com.example.tralecapstone.ui.state.UiState
 import com.example.tralecapstone.ui.theme.Yellow
 import com.example.tralecapstone.viewmodel.AuthViewModel
 import com.example.tralecapstone.viewmodel.ViewModelFactoryAuth
-import kotlinx.coroutines.flow.collectLatest
 
 const val DATASTORE = "user"
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATASTORE)
 
 @Composable
 fun Login(
-//    viewModel: AuthViewModel = hiltViewModel(),
-//    navigateBack: () -> Unit,
-    navController: NavController = rememberNavController(),
     authVM: AuthViewModel = viewModel(
         factory = ViewModelFactoryAuth(Injection.provideRepositoryAuth(LocalContext.current.dataStore))
     ),
@@ -66,14 +52,10 @@ fun Login(
         factory = ViewModelFactoryDataStore(pref)
     )
 
-    val token by prefVM.getToken().observeAsState()
-
     val focusManager = LocalFocusManager.current
-    val scrollState = rememberScrollState()
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var isPassVisible by remember { mutableStateOf(false) }
     var status by remember { mutableStateOf(false) }
 
     Column(
@@ -128,15 +110,14 @@ fun Login(
         FilledButton(
             text = "Login", color = Yellow,
             onClick = {
-                authVM.login(LoginRequest(email, password), context)
+                authVM.login(LoginRequest(email, password))
                 Log.d(
                     "cek login click",
-                    authVM.login(LoginRequest(email, password), context).toString()
+                    authVM.login(LoginRequest(email, password)).toString()
                 )
             },
             enable =
-            if (!validateEmailRegis(email = email) || !validatePasswordLogin(password = password)) false
-            else true
+            !(!validateEmailRegis(email = email) || !validatePasswordLogin(password = password))
         )
 
         val loginState by authVM.login.observeAsState()
@@ -157,20 +138,10 @@ fun Login(
                     bio = result.data.data.bio,
                     password = password
                 )
-                    Log.d(
-                        "cek data nama",
-                        " ${prefVM.getSession().value.toString()} ${prefVM.getName()}"
-                    )
                     status = true
                 }
 
                 is UiState.Error -> {
-//                            val errorMessage = result.data
-//                            println(errorMessage)
-//                            loginResult?.let {
-//                                Text(text = it.toString())
-//                                Text(text = errorMessage)
-//                            }
                     Log.d("cek login uierror", "error : ${result.errorMessage}")
                     Toast.makeText(context, "Error: ${result.errorMessage}", Toast.LENGTH_SHORT)
                         .show()
@@ -182,14 +153,6 @@ fun Login(
         }
     }
     return status
-}
-
-@Composable
-fun validateEmailLogin(email: String): Boolean {
-    var validateEmail by remember { mutableStateOf(true) }
-    validateEmail = email.isNotBlank()
-            && email.matches(".*@.*".toRegex())
-    return validateEmail
 }
 
 @Composable

@@ -20,7 +20,6 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.tralecapstone.R
 import com.example.tralecapstone.di.Injection
-import com.example.tralecapstone.model.repository.PlanTripRepository
 import com.example.tralecapstone.model.response.VoluntripResponse
 import com.example.tralecapstone.ui.components.*
 import com.example.tralecapstone.ui.state.UiState
@@ -78,18 +77,13 @@ fun VoluntripScreen(
 fun VoluntripContent(
     voluntrip: VoluntripResponse,
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = viewModel(
-        factory = ViewModelFactoryAuth(Injection.provideRepositoryAuth(LocalContext.current.dataStore))
-    ),
 ) {
     LazyColumn(
-//            contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp),
         modifier = modifier
     ){
         items(voluntrip.data) { data ->
             CardVoluntripItem(
-                id = data.id,
                 event_name = data.event_name,
                 description = data.description,
                 price = data.price,

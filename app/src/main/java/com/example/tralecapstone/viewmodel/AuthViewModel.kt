@@ -1,12 +1,8 @@
 package com.example.tralecapstone.viewmodel
 
-import android.content.ContentValues
-import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
-import com.example.tralecapstone.model.network.ApiServiceJS
 import com.example.tralecapstone.model.repository.AuthRepository
 import com.example.tralecapstone.model.request.EditProfile
 import com.example.tralecapstone.model.request.LoginRequest
@@ -14,19 +10,11 @@ import com.example.tralecapstone.model.request.RegisterRequest
 import com.example.tralecapstone.model.response.EditProfileResponse
 import com.example.tralecapstone.model.response.LoginResponse
 import com.example.tralecapstone.model.response.RegisterResponse
-import com.example.tralecapstone.model.response.User
 import com.example.tralecapstone.ui.state.UiState
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import javax.inject.Inject
 
-//@HiltViewModel
 class AuthViewModel @Inject constructor(
-//    private val api: ApiServiceJS
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
@@ -42,7 +30,7 @@ class AuthViewModel @Inject constructor(
     private val _edit = mutableStateOf<LiveData<UiState<EditProfileResponse>>>(liveData { })
     val edit: LiveData<UiState<EditProfileResponse>> get() = _edit.value
 
-    fun register(registerRequest: RegisterRequest, context: Context) {
+    fun register(registerRequest: RegisterRequest) {
         registerInProgress.value = true
         viewModelScope.launch {
             val result = authRepository.register(registerRequest)
@@ -52,7 +40,7 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun login(loginRequest: LoginRequest, context: Context) {
+    fun login(loginRequest: LoginRequest) {
         loginInProgress.value = true
         viewModelScope.launch {
             val result = authRepository.login(loginRequest)

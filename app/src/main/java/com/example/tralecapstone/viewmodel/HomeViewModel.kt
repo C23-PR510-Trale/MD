@@ -6,9 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tralecapstone.model.repository.AuthRepository
-import com.example.tralecapstone.model.repository.PlanTripRepository
-import com.example.tralecapstone.model.request.AddPlanRequest
-import com.example.tralecapstone.model.response.AddPlanResponse
 import com.example.tralecapstone.model.response.TripsResponse
 import com.example.tralecapstone.ui.state.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,11 +14,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-//@HiltViewModel
 class HomeViewModel @Inject constructor (private val repository: AuthRepository) : ViewModel() {
-//    private val _uiState: MutableStateFlow<UiState<List<AddPlanResponse>>> = MutableStateFlow(UiState.Loading)
-//    val uiState: StateFlow<UiState<List<AddPlanResponse>>> get() = _uiState
-
     private val _listPlan: MutableStateFlow<UiState<TripsResponse>> = MutableStateFlow(UiState.Loading)
     val listPlan: StateFlow<UiState<TripsResponse>> get() = _listPlan
 

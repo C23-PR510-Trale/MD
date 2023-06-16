@@ -11,11 +11,9 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -23,20 +21,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tralecapstone.R
-import com.example.tralecapstone.di.Injection
-import com.example.tralecapstone.model.repository.PlanTripRepository
-import com.example.tralecapstone.model.response.Prediction
-import com.example.tralecapstone.ui.components.DATASTORE
 import com.example.tralecapstone.ui.components.FilledButton
-import com.example.tralecapstone.ui.components.dataStore
-import com.example.tralecapstone.ui.state.UiState
 import com.example.tralecapstone.ui.theme.Orange400
 import com.example.tralecapstone.ui.theme.TraleCapstoneTheme
-import com.example.tralecapstone.viewmodel.DetailViewModel
-import com.example.tralecapstone.viewmodel.ViewModelFactory
 
 @Composable
 fun DetailPlanScreen(
@@ -51,9 +39,6 @@ fun DetailPlanScreen(
     onMessageClicked: (String) -> Unit,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: DetailViewModel = viewModel(
-        factory = ViewModelFactory(Injection.provideRepositoryPlanTrip(LocalContext.current.dataStore))
-    ),
     navigateToBooking: (Int, String, Int, Int, String, Float, Float, String) -> Unit,
     ) {
     DetailContent(
@@ -88,9 +73,6 @@ fun DetailContent(
     onMessageClicked: (String) -> Unit,
     navigateBack: () -> Unit,
     navigateToBooking: (Int, String, Int, Int, String, Float, Float, String) -> Unit,
-    viewModel: DetailViewModel = viewModel(
-        factory = ViewModelFactory(Injection.provideRepositoryPlanTrip(LocalContext.current.dataStore))
-    ),
 ) {
     Column(
         modifier = Modifier
@@ -211,8 +193,7 @@ fun DetailContent(
             modifier = Modifier.padding(vertical = 20.dp),
             onClick = { navigateToBooking(budget, preference, numrows, planId, title, price.toFloat(), rating.toFloat(), location) }
         )
-        val context = LocalContext.current
-        val shareMessage = "I want to ask about ${title} plan trip"
+        val shareMessage = "I want to ask about $title plan trip"
 
         FilledButton(
             text = "Message Host",

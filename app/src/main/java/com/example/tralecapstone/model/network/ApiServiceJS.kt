@@ -4,7 +4,6 @@ import com.example.tralecapstone.model.request.EditProfile
 import com.example.tralecapstone.model.request.LoginRequest
 import com.example.tralecapstone.model.request.RegisterRequest
 import com.example.tralecapstone.model.response.*
-import retrofit2.Call
 import retrofit2.http.*
 
 interface ApiServiceJS {
